@@ -179,6 +179,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                             'tag': tag,
                             'xpath': path,
                             'current_value': elem_info['text'],
+                            'change_count': count,
                             'suggestion': suggestion,
                             'confidence': confidence
                         })
@@ -196,7 +197,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
 
 async def run_pipeline(file_path=None):
     print("Analyzing changes between v1 and v2 files...")
-    analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    analyzer = extract_and_save_diffs("data/oldvone", "data/oldvtwo", "processed/diffs.jsonl")
     
     predictor = XMLRAGPredictor(persist_dir="vectorstore")
     print("\nTraining RAG model...")

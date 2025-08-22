@@ -13,16 +13,41 @@ class ChangeAnalyzer:
         self.tag_changes = defaultdict(int)
         self.change_types = defaultdict(int)
         self.changed_paths = set()
+        self._seen_changes = set()
+        self.xpath_changes = defaultdict(int)  # Add this line
+
+    def get_most_changed_xpaths(self, top_n: int = 10) -> List[Tuple[str, int]]:
+        """Get the most frequently changed XPaths."""
+        return sorted(
+            self.xpath_changes.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:top_n]
 
     def analyze_diff(self, diff: List[Dict], v1_content: str, v2_content: str):
         """Analyze the diff and update change patterns with detailed information."""
+        self._seen_changes = set()
+        xpath_changes = defaultdict(int)  # Track changes by full XPath
+        
         for change in diff:
             action = change.get('action')
             node = change.get('node', '')
             old_val = change.get('old_value', '')
             new_val = change.get('new_value', '')
+            
+            # Create a unique key for this change
+            change_key = (action, node, old_val, new_val)
+            
+            # Skip if we've already seen this exact change in this file comparison
+            if change_key in self._seen_changes:
+                continue
+                
+            self._seen_changes.add(change_key)
+            
             if node:
                 self.changed_paths.add(node)
+                xpath_changes[node] += 1  # Increment count for this XPath
+                
             tag = node.split('/')[-1].split('[')[0] if node else 'unknown'
 
             if tag and tag != 'unknown':
@@ -31,14 +56,20 @@ class ChangeAnalyzer:
             self.change_types[action] += 1
 
             if action == 'update' and old_val and new_val:
-                pattern = f"{tag}: {old_val} -> {new_val}"
+                pattern = f"{node}: {old_val} -> {new_val}"  # Include full XPath in pattern
                 self.change_patterns[tag][pattern] += 1
             elif action == 'insert' and new_val:
-                pattern = f"Add {tag}: {new_val}"
+                pattern = f"Add {node}: {new_val}"  # Include full XPath in pattern
                 self.change_patterns[tag][pattern] += 1
             elif action == 'delete' and old_val:
-                pattern = f"Remove {tag}: {old_val}"
+                pattern = f"Remove {node}: {old_val}"  # Include full XPath in pattern
                 self.change_patterns[tag][pattern] += 1
+        
+        # Store the XPath changes for later use
+        self.xpath_changes = xpath_changes
+
+        # Store the XPath changes for later use
+        self.xpath_changes = xpath_changes
 
     def get_most_common_changes(self, top_n: int = 5) -> List[Tuple[str, int]]:
         """Get the most common change patterns across all tags."""
@@ -179,6 +210,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                             'tag': tag,
                             'xpath': path,
                             'current_value': elem_info['text'],
+                            'change_count': count,
                             'suggestion': suggestion,
                             'confidence': confidence
                         })
@@ -196,7 +228,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
 
 async def run_pipeline(file_path=None):
     print("Analyzing changes between v1 and v2 files...")
-    analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    analyzer = extract_and_save_diffs("data/oldvone", "data/oldvtwo", "processed/diffs.jsonl")
     
     predictor = XMLRAGPredictor(persist_dir="vectorstore")
     print("\nTraining RAG model...")
@@ -207,7 +239,11 @@ async def run_pipeline(file_path=None):
     for pattern, count in analyzer.get_most_common_changes(5):
         print(f"- {pattern} (x{count})")
 
-    print("\nMost frequently changed tags:")
+    print("\n=== Most Changed XPaths ===")
+    for xpath, count in analyzer.get_most_changed_xpaths(10):
+        print(f"{xpath}: {count} changes")
+
+    print("\n=== Most Changed Tags ===")
     for tag, count in analyzer.get_most_changed_tags(5):
         print(f"- {tag} (changed {count} times)")
 

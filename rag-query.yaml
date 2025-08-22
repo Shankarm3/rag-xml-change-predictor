@@ -1,0 +1,29 @@
+I understand your concern about RAG prediction performance. Here's a quick analysis:
+
+1. **Performance Issue**:
+   - RAG can be slow due to:
+     - Embedding generation
+     - Vector similarity search
+     - LLM inference
+   - The slowdown is expected with larger documents or complex XML structures
+
+2. **Current Implementation**:
+   - The RAG code is in [generate_change_prediction](cci:1://file:///d:/Shankar/python-llm/rag_xml_change_predictor/main.py:100:0-194:9)
+   - It processes each element and makes predictions
+   - This can be resource-intensive for large XML files
+
+3. **Recommendations**:
+   - **For Now**: Keep RAG disabled since the core XML diffing works well
+   - **If You Need RAG Later**:
+     1. Optimize by:
+        - Processing only changed elements
+        - Using a local, faster embedding model
+        - Implementing caching
+     2. Consider batch processing for better performance
+
+4. **Is It a Good AI Tool?**
+   - For simple XML diffing: Yes, it's working well
+   - For predictions: Needs optimization for production use
+   - The architecture is solid but needs tuning for performance
+
+Would you like me to help optimize the RAG part, or are you happy with the current XML diffing functionality?

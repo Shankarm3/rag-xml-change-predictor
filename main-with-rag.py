@@ -98,8 +98,8 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str) -> 
 
     return analyzer
 
-def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
-    """Generate change predictions based on learned patterns."""
+async def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str, predictor = None) -> Dict:
+    """Generate change predictions using pattern matching and optionally RAG model."""
     from lxml import etree as ET
 
     try:
@@ -126,6 +126,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             'change_patterns': []
         }
 
+        # First, get pattern-based predictions
         for path, elem_info in elements.items():
             tag = elem_info['tag']
             current_text = elem_info['text']
@@ -134,12 +135,13 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                 continue
 
             common_changes = analyzer.get_changes_by_tag(tag)
-
+            
+            # Add pattern-based predictions
             for pattern, frequency in common_changes:
                 if '->' in pattern:
                     try:
                         old_part = pattern.split('->')[0].split(':', 1)[1].strip()
-                        if current_text == old_part and frequency >= 1:
+                        if current_text == old_part and frequency >= 1:  
                             new_text = pattern.split('->', 1)[1].strip()
                             confidence = min(95, 10 + frequency * 30)
                             predictions['suggested_changes'].append({
@@ -151,38 +153,41 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                                     'to': new_text,
                                     'confidence': confidence,
                                     'pattern': pattern,
-                                    'occurrences': frequency
+                                    'occurrences': frequency,
+                                    'source': 'pattern'
                                 }
                             })
                     except (IndexError, ValueError):
                         continue
 
-        for pattern, frequency in analyzer.get_most_common_changes():
-            predictions['change_patterns'].append({
-                'pattern': pattern,
-                'frequency': frequency
-            })
+            # Add change patterns for reference (only those with frequency >= 20)
+            predictions['change_patterns'].extend([
+                {'pattern': p, 'frequency': f, 'source': 'pattern'} 
+                for p, f in common_changes if f >= 20
+            ])
 
-        for tag, count in analyzer.get_most_changed_tags():
-            if tag in [e['tag'] for e in elements.values()]:
-                for path, elem_info in elements.items():
-                    if elem_info['tag'] == tag:
-                        confidence = min(80, count * 15)
-                        sample_changes = analyzer.get_changes_by_tag(tag, top_n=3)
-                        examples = "; ".join([p for p, _ in sample_changes])
-                        suggestion = (
-                            f"This <{tag}> element was frequently modified in previous versions. "
-                            f"Examples: {examples}" if examples else
-                            f"This <{tag}> element was frequently modified in previous versions."
-                        )
-                        predictions['potential_improvements'].append({
-                            'tag': tag,
-                            'xpath': path,
-                            'current_value': elem_info['text'],
-                            'suggestion': suggestion,
-                            'confidence': confidence
-                        })
-                        break
+        # Then try to get RAG-based predictions if predictor is provided
+        if predictor:
+            try:
+                # Set a timeout for RAG predictions
+                rag_predictions = await asyncio.wait_for(
+                    predictor.predict_changes(new_xml),
+                    timeout=30  # 30 seconds timeout
+                )
+                
+                if rag_predictions and 'suggested_changes' in rag_predictions:
+                    # Add source information to RAG predictions
+                    for change in rag_predictions['suggested_changes']:
+                        change['suggested_change']['source'] = 'rag'
+                    predictions['suggested_changes'].extend(rag_predictions['suggested_changes'])
+                
+                if rag_predictions and 'potential_improvements' in rag_predictions:
+                    predictions['potential_improvements'].extend(rag_predictions['potential_improvements'])
+                    
+            except asyncio.TimeoutError:
+                print("RAG prediction timed out, using pattern-based predictions only")
+            except Exception as e:
+                print(f"Warning: RAG prediction failed: {str(e)}")
 
         return predictions
 
@@ -193,10 +198,9 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             'potential_improvements': []
         }
 
-
 async def run_pipeline(file_path=None):
     print("Analyzing changes between v1 and v2 files...")
-    analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    analyzer = extract_and_save_diffs("data/oldvone", "data/oldvtwo", "processed/diffs.jsonl")
     
     predictor = XMLRAGPredictor(persist_dir="vectorstore")
     print("\nTraining RAG model...")
@@ -228,7 +232,7 @@ async def run_pipeline(file_path=None):
             with open(test_file, 'r', encoding='utf-8') as f:
                 test_xml = f.read()
 
-            predictions = generate_change_prediction(analyzer, test_xml)
+            predictions = await generate_change_prediction(analyzer, test_xml, predictor)
 
             if predictions.get("suggested_changes"):
                 print("\n=== Suggested Changes ===")

@@ -86,7 +86,7 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str) -> 
 
                 analyzer.analyze_diff(diff, v1_content, v2_content)
 
-                if diff:
+                if diff:  # only if there's a difference
                     sample = {
                         "file": filename,
                         "diff": diff
@@ -179,6 +179,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                             'tag': tag,
                             'xpath': path,
                             'current_value': elem_info['text'],
+                            'change_count': count,
                             'suggestion': suggestion,
                             'confidence': confidence
                         })
@@ -194,9 +195,10 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
         }
 
 
-async def run_pipeline(file_path=None):
+async def run_pipeline():
     print("Analyzing changes between v1 and v2 files...")
-    analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    # analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    analyzer = extract_and_save_diffs("data/oldvone", "data/oldvtwo", "processed/diffs.jsonl")
     
     predictor = XMLRAGPredictor(persist_dir="vectorstore")
     print("\nTraining RAG model...")
@@ -211,62 +213,70 @@ async def run_pipeline(file_path=None):
     for tag, count in analyzer.get_most_changed_tags(5):
         print(f"- {tag} (changed {count} times)")
 
-    os.makedirs("data/input", exist_ok=True)
-    
-    if file_path is None:
-        input_files = glob.glob("data/input/*.xml")
-        if not input_files:
-            print("\nNo XML files found in data/input/ directory.")
-            print("Please place new version 1 XML files in data/input/ for analysis.")
-            return {"error": "No XML files found in data/input/ directory."}
-    else:
-        input_files = [file_path]
-        
-    for test_file in input_files:
+    # test_file = "data/v1/sample_test.xml"
+    test_file = "data/oldvone/sample_staf1038.xml"
+    if os.path.exists(test_file):
         print(f"\nAnalyzing {test_file} for potential improvements...")
-        try:
-            with open(test_file, 'r', encoding='utf-8') as f:
-                test_xml = f.read()
+        with open(test_file, 'r', encoding='utf-8') as f:
+            test_xml = f.read()
 
-            predictions = generate_change_prediction(analyzer, test_xml)
+        # print("\n=== RAG Predictions ===")
+        # print("Running quick analysis...")
+        # rag_predictions = await predictor.predict_changes(
+        #     test_xml,
+        #     max_predictions=3,
+        #     timeout=20
+        # )
+        
+        # print("\nQuick Analysis Results:")
+        # print(rag_predictions)
+        
+        # # Run full analysis in background if needed
+        # print("\nStarting detailed analysis in background...")
+        # asyncio.create_task(
+        #     predictor.predict_changes(test_xml, max_predictions=5, timeout=20)
+        # )
+        
+        predictions = generate_change_prediction(analyzer, test_xml)
 
-            if predictions.get("suggested_changes"):
-                print("\n=== Suggested Changes ===")
-                for i, change in enumerate(predictions["suggested_changes"], 1):
-                    print(f"\n{i}. {change['suggested_change']['from']} -> {change['suggested_change']['to']} (Confidence: {change['suggested_change']['confidence']}%)")
-                    print(f"   XPath: {change['xpath']}")
-                    print(f"   Current: {change['current_value']}")
-                    print(f"   Suggest: {change['suggested_change']['to']}")
+        if predictions.get("suggested_changes"):
+            print("\n=== Suggested Changes ===")
+            for i, change in enumerate(predictions["suggested_changes"], 1):
+                print(f"\n{i}. {change['suggested_change']['from']} -> {change['suggested_change']['to']} suggestion (Confidence: {change['suggested_change']['confidence']}%)")
+                print(f"   XPath: {change['xpath']}")
+                print(f"   Current: {change['current_value']}")
+                print(f"   Suggest: {change['suggested_change']['to']}")
 
-            if predictions.get("potential_improvements"):
-                print("\n=== Potential Improvements ===")
-                for i, imp in enumerate(predictions["potential_improvements"], 1):
-                    print(f"\n{i}. Potential improvement in <{imp['tag']}> (Confidence: {imp['confidence']}%)")
-                    print(f"   XPath: {imp['xpath']}")
-                    print(f"   Current: '{imp['current_value']}'")
-                    print(f"   Suggestion: {imp['suggestion']}")
+        else:
+            print("\nNo specific change suggestions based on patterns.")
 
-            os.makedirs("predictions", exist_ok=True)
-            output_file = os.path.join("predictions", f"suggestions_{os.path.basename(test_file)}.json")
+        if predictions.get("potential_improvements"):
+            print("\n=== Potential Improvements ===")
+            for i, imp in enumerate(predictions["potential_improvements"], 1):
+                print(f"\n{i}. Potential improvement in <{imp['tag']}> (Confidence: {imp['confidence']}%)")
+                print(f"   XPath: {imp['xpath']}")
+                print(f"   Current: '{imp['current_value']}'")
+                print(f"   Suggestion: {imp['suggestion']}")
+
+        os.makedirs("predictions", exist_ok=True)
+        output_file = os.path.join("predictions", f"suggestions_{os.path.basename(test_file)}.json")
+        
+        # Prepare output data
+        output_data = {
+            'analyzer_predictions': predictions
+        }
+        
+        # Only include RAG predictions if they were generated
+        if 'rag_predictions' in locals():
+            output_data['rag_predictions'] = rag_predictions
             
-            output_data = {
-                'analyzer_predictions': predictions,
-                'file_analyzed': test_file,
-                'status': 'completed'
-            }
-            
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(output_data, f, indent=2)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(output_data, f, indent=2)
 
-            print(f"\nPredictions saved to: {output_file}")
-            return output_data
-            
-        except Exception as e:
-            error_msg = f"\nError processing {test_file}: {e}"
-            print(error_msg)
-            return {"error": str(e), "file": test_file, "status": "error"}
-    
-    return {"error": "No files processed", "status": "error"}
+        print(f"\nPredictions saved to: {output_file}")
+    else:
+        print(f"\nTest file not found: {test_file}")
+        print("Please place your test XML file in the data/oldvone/ directory")
 
 if __name__ == "__main__":
     asyncio.run(run_pipeline())

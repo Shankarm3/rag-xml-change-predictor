@@ -3,7 +3,6 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 from xmldiff import main, formatting
 import logging
-from lxml import etree
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +43,7 @@ class XMLDiff:
             )
             
             for change in diff_objects:
+                # Convert the diff object to our XMLChange object
                 xml_change = XMLChange(
                     action=getattr(change, 'action', 'unknown'),
                     node=getattr(change, 'node', ''),
@@ -86,10 +86,12 @@ class XMLDiff:
         change_type_counts = {}
         
         for change in self.diff:
+            # Count by tag
             if change.node:
                 tag = change.node.split('/')[-1].split('[')[0]
                 tag_counts[tag] = tag_counts.get(tag, 0) + 1
             
+            # Count by change type
             change_type = change.action
             change_type_counts[change_type] = change_type_counts.get(change_type, 0) + 1
         
@@ -102,6 +104,18 @@ class XMLDiff:
             'most_changed_tag': most_changed_tag,
             'most_changes_count': max_changes
         }
+
+def get_xpath(element) -> str:
+    """
+    Generate XPath from an XML element using standard xml.etree.ElementTree.
+    
+    Args:
+        element: XML element to generate XPath for
+        
+    Returns:
+        str: XPath string for the element
+    """
+from lxml import etree
 
 def get_xpath(element: etree.Element) -> str:
     """Generate full XPath for an element including indexes for siblings."""
