@@ -161,7 +161,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             predictions['change_patterns'].append({
                 'pattern': pattern,
                 'frequency': frequency
-            })
+            }) 
 
         for tag, count in analyzer.get_most_changed_tags():
             if tag in [e['tag'] for e in elements.values()]:
@@ -257,7 +257,7 @@ async def run_pipeline(file_path=None):
             
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(output_data, f, indent=2)
-
+            
             print(f"\nPredictions saved to: {output_file}")
             return output_data
             
