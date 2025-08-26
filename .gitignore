@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 *.so
 .Python
+gradio/
+__pycache__/
+quodo/
+venv/
 build/
 develop-eggs/
 dist/
