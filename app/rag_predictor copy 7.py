@@ -41,8 +41,10 @@ class XMLRAGPredictor:
     def _init_components(self, persist_dir: str) -> None:
         """Initialize model components with error handling."""
         try:
+            # Create persist directory if it doesn't exist
             os.makedirs(persist_dir, exist_ok=True)
             
+            # Configure Ollama with default settings
             self.embedding = OllamaEmbeddings(
                 model=self.EMBEDDING_MODEL
             )

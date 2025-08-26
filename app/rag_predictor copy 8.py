@@ -50,7 +50,7 @@ class XMLRAGPredictor:
             # Configure LLM with minimal settings
             self.llm = Ollama(
                 model=self.LLM_MODEL,
-                temperature=0.1  # Lower temperature for more focused responses
+                temperature=0.1
             )
             
             # Initialize Chroma client with optimized settings

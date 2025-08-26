@@ -65,22 +65,13 @@ class ChangeAnalyzer:
         filtered = [(tag, count) for tag, count in self.tag_changes.items() if count >= min_count]
         return sorted(filtered, key=lambda x: x[1], reverse=True)[:top_n]
 
-def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str, progress_step: int = 500, max_lines_per_file: int = 5000):
-    """
-    Extract diffs between v1 and v2 XML files and analyze changes.
-    Processes files in batches, writes progress, and splits output if needed.
-    """
+def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str) -> ChangeAnalyzer:
+    """Extract diffs between v1 and v2 XML files and analyze changes."""
     analyzer = ChangeAnalyzer()
     v1_files = sorted(glob.glob(os.path.join(v1_folder, '*.xml')))
-    total = len(v1_files)
-    file_count = 1
-    lines_written = 0
-    base, ext = os.path.splitext(output_file)
-    current_output = f"{base}_{file_count}{ext}"
 
-    out = open(current_output, 'w', encoding='utf-8')
-    try:
-        for idx, v1_path in enumerate(v1_files, 1):
+    with open(output_file, 'w', encoding='utf-8') as out:
+        for v1_path in v1_files:
             filename = os.path.basename(v1_path)
             v2_path = os.path.join(v2_folder, filename)
 
@@ -91,7 +82,9 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str, pro
             try:
                 v1_content = read_xml(v1_path)
                 v2_content = read_xml(v2_path)
+
                 diff = compute_diff(v1_path, v2_path)
+
                 analyzer.analyze_diff(diff, v1_content, v2_content)
 
                 if diff:
@@ -100,23 +93,10 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str, pro
                         "diff": diff
                     }
                     out.write(json.dumps(sample) + "\n")
-                    lines_written += 1
-
-                if lines_written >= max_lines_per_file:
-                    out.close()
-                    file_count += 1
-                    current_output = f"{base}_{file_count}{ext}"
-                    out = open(current_output, 'w', encoding='utf-8')
-                    lines_written = 0
 
             except Exception as e:
                 print(f"Error processing {filename}: {e}")
 
-            if idx % progress_step == 0 or idx == total:
-                print(f"Processed {idx}/{total} files...")
-
-    finally:
-        out.close()
     return analyzer
 
 def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
@@ -230,7 +210,7 @@ async def run_pipeline(file_path=None):
     
     try:
         print("Analyzing changes between v1 and v2 files...")
-        analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl", progress_step=500)
+        analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
         
         predictor = XMLRAGPredictor(persist_dir="vectorstore")
         
