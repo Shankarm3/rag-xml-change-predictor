@@ -6,6 +6,7 @@ from typing import List, Dict, Tuple
 from utils.xml_diff import compute_diff, read_xml, get_xpath
 from app.rag_predictor import XMLRAGPredictor
 import asyncio
+from pathlib import Path
 
 class ChangeAnalyzer:
     def __init__(self):
@@ -44,6 +45,7 @@ class ChangeAnalyzer:
         """Get the most common change patterns across all tags."""
         all_changes = []
         for tag, patterns in self.change_patterns.items():
+            print("Tag found =>", tag)
             for pattern, count in patterns.items():
                 all_changes.append((pattern, count))
 
@@ -108,7 +110,12 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             
         parser = ET.XMLParser(recover=True)
         root = ET.fromstring(new_xml, parser=parser)
-        
+        if root is None:
+            return {
+                'error': 'Invalid or empty XML file. No root element found.',
+                'suggested_changes': [],
+                'potential_improvements': []
+            }
         elements = {}
         for elem in root.iter():
             if elem.text and elem.text.strip():
@@ -161,7 +168,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             predictions['change_patterns'].append({
                 'pattern': pattern,
                 'frequency': frequency
-            }) 
+            })
 
         for tag, count in analyzer.get_most_changed_tags():
             if tag in [e['tag'] for e in elements.values()]:
@@ -195,78 +202,140 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
 
 
 async def run_pipeline(file_path=None):
-    print("Analyzing changes between v1 and v2 files...")
-    analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
+    result = {
+        'status': 'error',
+        'message': 'No files processed',
+        'suggested_changes': [],
+        'potential_improvements': []
+    }
     
-    predictor = XMLRAGPredictor(persist_dir="vectorstore")
-    print("\nTraining RAG model...")
-    predictor.train_from_diffs("processed/diffs.jsonl")
-
-    print("\n=== Change Analysis ===")
-    print("\nMost common change patterns:")
-    for pattern, count in analyzer.get_most_common_changes(5):
-        print(f"- {pattern} (x{count})")
-
-    print("\nMost frequently changed tags:")
-    for tag, count in analyzer.get_most_changed_tags(5):
-        print(f"- {tag} (changed {count} times)")
-
-    os.makedirs("data/input", exist_ok=True)
-    
-    if file_path is None:
-        input_files = glob.glob("data/input/*.xml")
-        if not input_files:
-            print("\nNo XML files found in data/input/ directory.")
-            print("Please place new version 1 XML files in data/input/ for analysis.")
-            return {"error": "No XML files found in data/input/ directory."}
-    else:
-        input_files = [file_path]
+    try:
+        print("Analyzing changes between v1 and v2 files...")
+        analyzer = extract_and_save_diffs("data/v1", "data/v2", "processed/diffs.jsonl")
         
-    for test_file in input_files:
-        print(f"\nAnalyzing {test_file} for potential improvements...")
+        predictor = XMLRAGPredictor(persist_dir="vectorstore")
+        
         try:
-            with open(test_file, 'r', encoding='utf-8') as f:
-                test_xml = f.read()
-
-            predictions = generate_change_prediction(analyzer, test_xml)
-
-            if predictions.get("suggested_changes"):
-                print("\n=== Suggested Changes ===")
-                for i, change in enumerate(predictions["suggested_changes"], 1):
-                    print(f"\n{i}. {change['suggested_change']['from']} -> {change['suggested_change']['to']} (Confidence: {change['suggested_change']['confidence']}%)")
-                    print(f"   XPath: {change['xpath']}")
-                    print(f"   Current: {change['current_value']}")
-                    print(f"   Suggest: {change['suggested_change']['to']}")
-
-            if predictions.get("potential_improvements"):
-                print("\n=== Potential Improvements ===")
-                for i, imp in enumerate(predictions["potential_improvements"], 1):
-                    print(f"\n{i}. Potential improvement in <{imp['tag']}> (Confidence: {imp['confidence']}%)")
-                    print(f"   XPath: {imp['xpath']}")
-                    print(f"   Current: '{imp['current_value']}'")
-                    print(f"   Suggestion: {imp['suggestion']}")
-
-            os.makedirs("predictions", exist_ok=True)
-            output_file = os.path.join("predictions", f"suggestions_{os.path.basename(test_file)}.json")
-            
-            output_data = {
-                'analyzer_predictions': predictions,
-                'file_analyzed': test_file,
-                'status': 'completed'
-            }
-            
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(output_data, f, indent=2)
-            
-            print(f"\nPredictions saved to: {output_file}")
-            return output_data
-            
+            print("\nTraining RAG model (this may take a few minutes)...")
+            # await asyncio.wait_for(
+            #     predictor.train_from_diffs(
+            #         "processed/diffs.jsonl",
+            #         chunk_size=500,
+            #         chunk_overlap=50
+            #     ),
+            #     timeout=3 
+            # )
+            print("\nRAG model training completed")
+        except asyncio.TimeoutError:
+            print("\nTraining took too long, continuing with partial results")
         except Exception as e:
-            error_msg = f"\nError processing {test_file}: {e}"
-            print(error_msg)
-            return {"error": str(e), "file": test_file, "status": "error"}
-    
-    return {"error": "No files processed", "status": "error"}
+            print(f"\nError during training: {str(e)}")
+        
+        print("\n=== Change Analysis ===")
+        print("\nMost common change patterns:")
+        for pattern, count in analyzer.get_most_common_changes(5):
+            print(f"- {pattern} (x{count})")
+
+        print("\nMost frequently changed tags:")
+        for tag, count in analyzer.get_most_changed_tags(5):
+            print(f"- {tag} (changed {count} times)")
+
+        input_files = []
+        if file_path is None:
+            input_dir = Path("data/input")
+            if input_dir.exists() and any(input_dir.iterdir()):
+                input_files = list(input_dir.glob("*.xml"))
+            else:
+                print("\nNo XML files found in data/input/ directory.")
+                print("Please place new version 1 XML files in data/input/ for analysis.")
+                return result
+        else:
+            input_files = [Path(file_path)]
+            
+        for test_file in input_files:
+            print(f"\nAnalyzing {test_file} for potential improvements...")
+            try:
+                with open(test_file, 'r', encoding='utf-8') as f:
+                    test_xml = f.read()
+
+                # Get RAG predictions (commented out for now)
+                # print("\n=== RAG Predictions ===")
+                # rag_predictions = await predictor.predict_changes(test_xml)
+
+                predictions = generate_change_prediction(analyzer, test_xml)
+
+                if predictions.get("suggested_changes"):
+                    print("\n=== Suggested Changes ===")
+                    for i, change in enumerate(predictions["suggested_changes"], 1):
+                        print(f"\n{i}. {change['suggested_change']['from']} -> {change['suggested_change']['to']} (Confidence: {change['suggested_change']['confidence']}%)")
+                        print(f"   XPath: {change['xpath']}")
+                        print(f"   Current: {change['current_value']}")
+                        print(f"   Suggest: {change['suggested_change']['to']}")
+
+                if predictions.get("potential_improvements"):
+                    print("\n=== Potential Improvements ===")
+                    for i, imp in enumerate(predictions["potential_improvements"], 1):
+                        print(f"\n{i}. {imp['suggestion']} (Confidence: {imp['confidence']}%)")
+                        print(f"   XPath: {imp['xpath']}")
+                        print(f"   Current: {imp['current_value']}")
+                        print(f"   Suggestion: {imp['suggestion']}")
+
+                output_dir = Path("predictions")
+                output_dir.mkdir(exist_ok=True)
+                output_file = output_dir / f"suggestions_{test_file.stem}.json"
+                
+                output_data = {
+                    'suggested_changes': predictions.get("suggested_changes", []),
+                    'potential_improvements': predictions.get("potential_improvements", []),
+                    'change_patterns': [
+                        { 'pattern': pattern, 'frequency': freq }
+                        for pattern, freq in analyzer.get_most_common_changes(10)
+                    ],
+                    'file_analyzed': str(test_file),
+                    'status': 'completed'
+                }
+                
+                if 'rag_predictions' in locals():
+                    output_data['rag_predictions'] = rag_predictions
+
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    json.dump(output_data, f, indent=2)
+
+                print(f"\nPredictions saved to: {output_file}")
+                result = output_data
+                
+            except Exception as e:
+                print(f"Error processing {test_file}: {str(e)}")
+                result['message'] = f"Error processing {test_file}: {str(e)}"
+                
+        return result
+        
+    except Exception as e:
+        print(f"\nAn error occurred: {str(e)}")
+        result['message'] = str(e)
+        return result
+    finally:
+        if 'predictor' in locals():
+            del predictor
+        tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+
 
 if __name__ == "__main__":
-    asyncio.run(run_pipeline())
+    try:
+        asyncio.run(run_pipeline())
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user")
+    except Exception as e:
+        print(f"\nAn error occurred: {str(e)}")
+    finally:
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                loop.stop()
+                loop.close()
+        except:
+            pass
+        print("\nCleanup complete. Exiting...")

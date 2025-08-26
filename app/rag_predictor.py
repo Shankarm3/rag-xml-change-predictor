@@ -1,4 +1,4 @@
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQA
@@ -11,6 +11,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import lru_cache
 import aiofiles
 import numpy as np
+import os
+import chromadb
+from chromadb.config import Settings
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -19,13 +22,17 @@ class XMLRAGPredictor:
     EMBEDDING_MODEL = "nomic-embed-text"
     LLM_MODEL = "llama3:latest"
     
-    DEFAULT_CHUNK_SIZE = 1000
-    DEFAULT_CHUNK_OVERLAP = 100
-    BATCH_SIZE = 32
-    MAX_WORKERS = 4
+    # Reduced default chunk sizes and batch size for better memory usage
+    DEFAULT_CHUNK_SIZE = 500
+    DEFAULT_CHUNK_OVERLAP = 50
+    BATCH_SIZE = 8
+    MAX_WORKERS = 2
 
     def __init__(self, persist_dir: str = "vectorstore") -> None:
         """Initialize the RAG predictor with vector store and LLM."""
+        # Set environment variables for better memory management
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+        
         self._init_components(persist_dir)
         self._executor = ThreadPoolExecutor(max_workers=self.MAX_WORKERS)
         self._semaphore = asyncio.Semaphore(self.MAX_WORKERS)
@@ -34,18 +41,53 @@ class XMLRAGPredictor:
     def _init_components(self, persist_dir: str) -> None:
         """Initialize model components with error handling."""
         try:
-            self.embedding = OllamaEmbeddings(model=self.EMBEDDING_MODEL)
-            self.llm = Ollama(model=self.LLM_MODEL)
+            # Create persist directory if it doesn't exist
+            os.makedirs(persist_dir, exist_ok=True)
+            
+            # Configure Ollama with default settings
+            self.embedding = OllamaEmbeddings(
+                model=self.EMBEDDING_MODEL
+            )
+            
+            # Configure LLM with minimal settings
+            self.llm = Ollama(
+                model=self.LLM_MODEL,
+                temperature=0.1  # Lower temperature for more focused responses
+            )
+            
+            # Initialize Chroma client with optimized settings
+            client = chromadb.PersistentClient(
+                path=persist_dir,
+                settings=Settings(
+                    anonymized_telemetry=False,
+                    allow_reset=True,
+                )
+            )
+            
+            # Initialize Chroma vector store
             self.vectorstore = Chroma(
-                persist_directory=persist_dir, 
+                client=client,
+                collection_name="xml_rag_collection",
                 embedding_function=self.embedding,
-                collection_metadata={"hnsw:space": "cosine"}
+                persist_directory=persist_dir
             )
+            
+            # Configure retriever with optimized settings
+            retriever = self.vectorstore.as_retriever(
+                search_type="similarity",
+                search_kwargs={
+                    "k": 2,  # Reduce number of retrieved documents
+                }
+            )
+            
             self.qa = RetrievalQA.from_chain_type(
-                llm=self.llm, 
-                retriever=self.vectorstore.as_retriever(search_kwargs={"k": 3})
+                llm=self.llm,
+                retriever=retriever,
+                return_source_documents=True
             )
+            
             logger.info("RAG predictor initialized successfully")
+            
         except Exception as e:
             logger.error(f"Failed to initialize RAG predictor: {str(e)}")
             raise
@@ -175,7 +217,7 @@ class XMLRAGPredictor:
                 return result
                 
             except asyncio.TimeoutError:
-                logger.warning(f"Prediction timed out after {timeout} seconds")
+                # logger.warning(f"Prediction timed out after {timeout} seconds")
                 return ""
                 
         except Exception as e:
@@ -199,6 +241,7 @@ class XMLRAGPredictor:
         
         results = []
         chunk_timeout = max(30, timeout // max(1, len(chunks)))
+        # chunk_timeout = 1
         
         for i, chunk in enumerate(chunks):
             logger.info(f"Processing chunk {i+1}/{len(chunks)}")
@@ -252,10 +295,15 @@ Format each change concisely in one line:
             )
 
     def __del__(self):
-        """Ensure resources are cleaned up on object destruction."""
+        """Ensure resources are properly cleaned up."""
         if hasattr(self, '_executor'):
             self._executor.shutdown(wait=False)
-
+        if hasattr(self, 'vectorstore'):
+            self.vectorstore = None
+        if hasattr(self, 'llm'):
+            self.llm = None
+        if hasattr(self, 'embedding'):
+            self.embedding = None
 # Example async usage:
 # async def main():
 #     predictor = XMLRAGPredictor()

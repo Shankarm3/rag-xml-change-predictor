@@ -4,9 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-.gradio/
-.quodo/
-.__pycache__
 build/
 develop-eggs/
 dist/

@@ -103,6 +103,7 @@ class XMLDiff:
             'most_changes_count': max_changes
         }
 
+
 def get_xpath(element: etree.Element) -> str:
     """Generate full XPath for an element including indexes for siblings."""
     path = []
