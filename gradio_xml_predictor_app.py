@@ -65,7 +65,6 @@ def predict_changes(xml_file):
     )
 
 def show_json(result):
-    # result may be a gradio.State object or a plain dict
     value = getattr(result, 'value', result)
     if not value:
         return gr.update(value="No result.", visible=True)
@@ -78,7 +77,6 @@ def show_json(result):
         return gr.update(value=f"Unable to display JSON: {e}", visible=True)
 
 def on_file_upload(xml_file):
-    # If file uploaded, enable Analyze and do not clear outputs.
     if xml_file:
         # Analyze enabled, don't clear outputs
         return (
@@ -200,37 +198,37 @@ def build_ui():
         """)
         with gr.Row():
             file_in = gr.File(label="Upload XML for Prediction", file_types=[".xml"], interactive=True)
-        # with gr.Row():
-        #     analyze_btn = gr.Button("🔍 Analyze", interactive=False, elem_classes=["analyze-btn"])
-        #     json_btn = gr.Button("📄 Show JSON", interactive=False, elem_classes=["json-btn"])
-        # with gr.Row():
-        #     with gr.Column():
-        #         out_suggested = gr.Textbox(label="Suggested Changes", visible=False, lines=10, interactive=False, elem_classes=["card-result"])
-        #     with gr.Column():
-        #         out_impr = gr.Textbox(label="Improvement Suggestions", visible=False, lines=8, interactive=False, elem_classes=["card-result"])
-        # with gr.Accordion("🌐 See most frequent change patterns...", open=False):
-        #     out_patterns = gr.Textbox(label="Frequent Change Patterns", visible=False, lines=8, interactive=False, elem_classes=["card-result"])
-        # with gr.Accordion("📂 Show result as JSON", open=False) as acc_json:
-        #     out_json = gr.Code(label="Raw JSON", visible=False, language="json")
+        with gr.Row():
+            analyze_btn = gr.Button("🔍 Analyze", interactive=False, elem_classes=["analyze-btn"])
+            json_btn = gr.Button("📄 Show JSON", interactive=False, elem_classes=["json-btn"])
+        with gr.Row():
+            with gr.Column():
+                out_suggested = gr.Textbox(label="Suggested Changes", visible=False, lines=10, interactive=False, elem_classes=["card-result"])
+            with gr.Column():
+                out_impr = gr.Textbox(label="Improvement Suggestions", visible=False, lines=8, interactive=False, elem_classes=["card-result"])
+        with gr.Accordion("🌐 See most frequent change patterns...", open=False):
+            out_patterns = gr.Textbox(label="Frequent Change Patterns", visible=False, lines=8, interactive=False, elem_classes=["card-result"])
+        with gr.Accordion("📂 Show result as JSON", open=False) as acc_json:
+            out_json = gr.Code(label="Raw JSON", visible=False, language="json")
         state = gr.State(value=None)
 
         file_in.change(
             on_file_upload,
             inputs=file_in,
             outputs=[
-                # analyze_btn,            # (0) Enable/disable Analyze button
-                # out_suggested,         # (1) Clear/Hide Suggested
-                # out_impr,              # (2) Clear/Hide Improvements
-                # out_patterns,          # (3) Clear/Hide Patterns
+                analyze_btn,            # (0) Enable/disable Analyze button
+                out_suggested,         # (1) Clear/Hide Suggested
+                out_impr,              # (2) Clear/Hide Improvements
+                out_patterns,          # (3) Clear/Hide Patterns
                 state,                 # (4) Reset state
-                # json_btn,              # (5) Disable Show JSON
-                # out_json               # (6) Hide JSON output
+                json_btn,              # (5) Disable Show JSON
+                out_json               # (6) Hide JSON output
             ]
         )
-        # analyze_btn.click(predict_changes, inputs=[file_in], outputs=[out_suggested, out_impr, out_patterns, state, json_btn])
-        # json_btn.click(show_json, inputs=state, outputs=out_json)
+        analyze_btn.click(predict_changes, inputs=[file_in], outputs=[out_suggested, out_impr, out_patterns, state, json_btn])
+        json_btn.click(show_json, inputs=state, outputs=out_json)
     return demo
 
 if __name__ == "__main__":
     demo = build_ui()
-    demo.launch()
+    demo.launch(share=True)

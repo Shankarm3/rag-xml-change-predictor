@@ -39,7 +39,7 @@ class XMLAnalyzerApp:
         # Configure styles
         self.style.configure('.', background=self.bg_color)
         self.style.configure('TFrame', background=self.bg_color)
-        self.style.configure('TLabel', background=self.bg_color, font=('Segoe UI', 10))
+        self.style.configure('TLabel', background=self.bg_color, font=('Segoe UI', 12))
         self.style.configure('TButton', 
                            font=('Segoe UI', 10, 'bold'),
                            padding=8,
@@ -58,18 +58,65 @@ class XMLAnalyzerApp:
                            borderwidth=1,
                            relief='solid')
         
+        # Improved StatusBar style (define before packing widgets!)
+        self.status_var = tk.StringVar()
+        self.status_var.set("Ready")
+        self.style.configure('StatusBar.TLabel',
+            background="#e4eef9",
+            foreground="#196fa2",
+            font=('Segoe UI', 12, 'bold'),
+            padding=(13, 10, 8, 10),
+            relief='ridge',
+            borderwidth=2
+        )
+        self.status_bar = ttk.Label(
+            self.root,  # Attach to root
+            textvariable=self.status_var,
+            anchor=tk.W,
+            style='StatusBar.TLabel'
+        )
+        self.status_bar.pack(fill=tk.X, side=tk.BOTTOM, pady=(0, 0))
+
         # Main container
         self.main_frame = ttk.Frame(root, padding=(20, 15))
         self.main_frame.pack(fill=tk.BOTH, expand=True)
         
-        # Header
-        header_frame = ttk.Frame(self.main_frame)
-        header_frame.pack(fill=tk.X, pady=(0, 20))
+        # HERO CARD HEADER
+        self.style.configure('HeroCard.TFrame', background='#fafdff', relief='ridge', borderwidth=3, bordercolor='#c5e6ff')
+        self.style.configure('HeroTitle.TLabel', font=('Segoe UI', 26, 'bold'), foreground='#0185fc', background='#fafdff')
+
+        hero_frame = ttk.Frame(self.main_frame, style='HeroCard.TFrame', padding=(35,25,35,25))
+        hero_frame.pack(fill=tk.X, pady=(0, 27))
         ttk.Label(
-            header_frame,
-            text="XML Change Predictor",
-            style='Header.TLabel'
-        ).pack(side=tk.LEFT)
+            hero_frame,
+            text="🧩 XML Change Predictor",
+            style='HeroTitle.TLabel',
+            anchor='center',
+            justify='center',
+            padding=(8,2,8,0)
+        ).pack(anchor='center')
+        ttk.Label(
+            hero_frame,
+            text="AI-powered suggestions for smarter XML evolution.",
+            font=('Segoe UI', 14, 'italic'),
+            foreground='#4ba2e8',
+            background='#fafdff',
+            anchor='center',
+            justify='center',
+            padding=(8,3,8,13)
+        ).pack(anchor='center')
+        ttk.Label(
+            hero_frame,
+            text="Upload an XML file to discover likely changes, frequent patterns, and improvement ideas — all powered by data-driven AI.",
+            font=('Segoe UI', 11),
+            foreground='#374e60',
+            background='#fafdff',
+            anchor='center',
+            justify='center',
+            wraplength=640,
+            padding=(10,0,10,5)
+        ).pack(anchor='center')
+        # End HERO CARD HEADER
         
         # File selection
         self.file_frame = ttk.LabelFrame(
@@ -113,11 +160,24 @@ class XMLAnalyzerApp:
         )
         self.analyze_btn.pack(side=tk.LEFT, padx=(0, 10))
         
+        # Clear Button with improved custom style
+        self.style.configure('Clear.TButton',
+            background=self.danger_color,
+            foreground='white',
+            font=('Segoe UI', 10, 'bold'),
+            padding=8,
+            borderwidth=0,
+            relief='flat',
+        )
+        self.style.map('Clear.TButton',
+            background=[('active', '#ba2630'), ('pressed', '#ec7676')],
+            foreground=[('active', 'white'), ('pressed', 'white')]
+        )
         self.clear_btn = ttk.Button(
             btn_frame,
             text="Clear Results",
             command=self.clear_output,
-            style='TButton'
+            style='Clear.TButton'
         )
         self.clear_btn.pack(side=tk.LEFT)
         
@@ -125,7 +185,7 @@ class XMLAnalyzerApp:
         self.progress = ttk.Progressbar(
             self.control_frame,
             orient=tk.HORIZONTAL,
-            length=200,
+            length=600,
             mode='indeterminate',
             style='TProgressbar'
         )
@@ -185,17 +245,7 @@ class XMLAnalyzerApp:
         self.json_text.tag_configure("null", foreground="#7f8c8d")
         self.json_text.tag_configure("bracket", foreground="#2c3e50")
         
-        self.status_var = tk.StringVar()
-        self.status_var.set("Ready")
-        self.status_bar = ttk.Label(
-            self.main_frame,
-            textvariable=self.status_var,
-            relief=tk.SUNKEN,
-            anchor=tk.W,
-            padding=(10, 5),
-            style='TLabel'
-        )
-        self.status_bar.pack(fill=tk.X, side=tk.BOTTOM, pady=(10, 0))
+        # (moved above)
         
         sys.stdout = TextRedirector(self.output_text, "stdout")
         
@@ -210,7 +260,7 @@ class XMLAnalyzerApp:
         self.style.configure('Card.TLabelframe.Label', 
                            background='white',
                            foreground=self.primary_color,
-                           font=('Segoe UI', 10, 'bold'))
+                           font=('Segoe UI', 12, 'bold'))
         
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
@@ -315,7 +365,7 @@ class XMLAnalyzerApp:
             
             self._format_json(json_str)
             
-            self.notebook.select(1)
+            self.notebook.select(0)
             
         except Exception as e:
             self.json_text.config(state=tk.NORMAL)
