@@ -4,11 +4,14 @@ __pycache__/
 *$py.class
 *.so
 .Python
+/data
 gradio/
 __pycache__/
 quodo/
 venv/
+/predictions
 build/
+/processed
 develop-eggs/
 dist/
 downloads/

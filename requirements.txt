@@ -31,3 +31,6 @@ pytest-asyncio>=0.21.0  # For async tests
 black>=23.3.0
 mypy>=1.0.0
 types-aiofiles>=23.2.0  # Type stubs for aiofiles
+
+# Web UI
+gradio>=4.0.0

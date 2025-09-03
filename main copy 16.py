@@ -3,11 +3,12 @@ import glob
 import json
 from collections import defaultdict
 from typing import List, Dict, Tuple
-from utils.xml_diff import compare_xml_files, compute_diff, read_xml, get_xpath
+from utils.xml_diff import compute_diff, read_xml, get_xpath
 from app.rag_predictor import XMLRAGPredictor
 import asyncio
 from pathlib import Path
 import logging
+from lxml import etree
 import sys
 import argparse
 
@@ -83,7 +84,7 @@ class ChangeAnalyzer:
         filtered = [(tag, count) for tag, count in self.tag_changes.items() if count >= min_count]
         return sorted(filtered, key=lambda x: x[1], reverse=True)[:top_n]
 
-def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, journal: str, progress_step: int = 500, max_lines_per_file: int = 5000):
+def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_file: str, progress_step: int = 500, max_lines_per_file: int = 5000):
     """
     Extract diffs between v1 and v2 XML files and analyze changes.
     Processes files in batches, writes progress, and splits output if needed.
@@ -92,8 +93,7 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
     Args:
         v1_folder: Path to folder containing v1 XML files
         v2_folder: Path to folder containing v2 XML files
-        output_dir: Base output directory for diff files
-        journal: Journal name for organizing diff files
+        output_file: Base output file path (will be split if needed)
         progress_step: Print progress every N files
         max_lines_per_file: Maximum number of lines per output file before splitting
     """
@@ -102,14 +102,11 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
     total = len(v1_files)
     file_count = 1
     lines_written = 0
+    base, ext = os.path.splitext(output_file)
+    current_output = f"{base}_{file_count}{ext}"
     
-    # Create journal-specific output directory
-    journal_output_dir = os.path.join(output_dir, journal)
-    os.makedirs(journal_output_dir, exist_ok=True)
-    
-    # Base output file path with journal name
-    base_output = os.path.join(journal_output_dir, 'diffs.jsonl')
-    current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
+    # Create output directory if it doesn't exist
+    os.makedirs(os.path.dirname(os.path.abspath(current_output)), exist_ok=True)
     
     out = open(current_output, 'w', encoding='utf-8')
     processed_files = 0
@@ -128,49 +125,59 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
                 
             try:
                 # Process the file
+                # logger.debug(f"Processing file: {filename}")
                 v1_content = read_xml(v1_path)
                 v2_content = read_xml(v2_path)
-
+                
+                # Skip if either file is empty
                 if not v1_content or not v2_content:
                     logger.warning(f"Skipping {filename}: Empty content in v1 or v2 file")
+                    logger.debug(f"v1 empty: {not v1_content}, v2 empty: {not v2_content}")
                     skipped_files += 1
                     continue
-
-                # Please do not remove this comment
+                    
+                # Compute diff
                 # Try deep diff (if model/API available), else fallback to classic
                 # from utils.xml_diff import compute_diff_deep
                 # diff = compute_diff_deep(v1_path, v2_path)
-                # diff = compare_xml_files(v1_path, v2_path)
-                
+
                 diff = compute_diff(v1_path, v2_path)
-                
                 
                 if diff:
                     analyzer.analyze_diff(diff, v1_content, v2_content)
+                    # Write the diff to output file
                     diff_entry = {
                         'filename': filename,
-                        'journal': journal,
                         'diff': [d if isinstance(d, dict) else d.to_dict() for d in diff]
                     }
                     out.write(json.dumps(diff_entry) + '\n')
                     lines_written += 1
                     
+                    # Check if we need to rotate output file
                     if lines_written >= max_lines_per_file:
                         out.close()
                         file_count += 1
-                        current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
+                        current_output = f"{base}_{file_count}{ext}"
                         out = open(current_output, 'w', encoding='utf-8')
                         lines_written = 0
-
+                
                 processed_files += 1
                 
+                # Log progress
                 if idx % progress_step == 0 or idx == total:
                     logger.info(f"Processed {idx}/{total} files ({idx/total*100:.1f}%), "
                               f"Skipped: {skipped_files}, Output file: {current_output}")
             
             except Exception as e:
-                logger.error(f"Error processing {filename}: {str(e)}", exc_info=True)
+                logger.error(f"Error processing {filename} (v1: {v1_path}, v2: {v2_path}): {str(e)}", exc_info=True)
                 skipped_files += 1
+                # Log file existence and sizes
+                for path in [v1_path, v2_path]:
+                    try:
+                        size = os.path.getsize(path)
+                        logger.error(f"File {path} exists, size: {size} bytes")
+                    except Exception as file_err:
+                        logger.error(f"Could not get info for {path}: {str(file_err)}")
                 continue
                 
     except Exception as e:
@@ -181,69 +188,6 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
         out.close()
         
     logger.info(f"Processing complete. Processed: {processed_files}, Skipped: {skipped_files}")
-    return analyzer
-
-def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
-    """
-    Load and aggregate processed diffs for analysis.
-    If journal is specified, only load diffs for that journal.
-    
-    Args:
-        journal: Optional journal name to filter diffs
-    """
-    analyzer = ChangeAnalyzer()
-    processed_dir = "processed"
-    
-    if not os.path.exists(processed_dir):
-        logger.warning(f"No processed directory found at {processed_dir}")
-        return analyzer
-    
-    # If journal is specified, only process that journal's directory
-    if journal:
-        journal_dirs = [os.path.join(processed_dir, journal)]
-    else:
-        # Otherwise process all journals
-        journal_dirs = [
-            os.path.join(processed_dir, d) 
-            for d in os.listdir(processed_dir)
-            if os.path.isdir(os.path.join(processed_dir, d))
-        ]
-    
-    total_files = 0
-    lines = 0
-    
-    for journal_dir in journal_dirs:
-        if not os.path.isdir(journal_dir):
-            logger.warning(f"Skipping non-directory: {journal_dir}")
-            continue
-            
-        # Find all diff files for this journal
-        diff_files = sorted(glob.glob(os.path.join(journal_dir, 'diffs_*.jsonl'))) or \
-                    sorted(glob.glob(os.path.join(journal_dir, 'diffs.jsonl*')))
-        
-        for diff_file in diff_files:
-            try:
-                with open(diff_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        try:
-                            entry = json.loads(line)
-                            # Only process entries for the specified journal if filtering
-                            if journal is None or entry.get('journal') == journal:
-                                analyzer.analyze_diff(
-                                    entry['diff'],
-                                    "",  # Original content not needed for analysis
-                                    ""   # New content not needed for analysis
-                                )
-                                lines += 1
-                        except json.JSONDecodeError as e:
-                            logger.warning(f"Error parsing JSON in {diff_file}: {e}")
-                            continue
-                total_files += 1
-            except Exception as e:
-                logger.error(f"Error reading {diff_file}: {e}")
-                continue
-    
-    logger.info(f"Loaded {lines} diffs from {total_files} files for journal: {journal or 'all'}")
     return analyzer
 
 def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
@@ -347,7 +291,7 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
         }
 
 
-async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, journal: str = "mnras"):
+async def run_pipeline(file_path=None, journal=None):
     result = {
         'status': 'error',
         'message': 'No files processed',
@@ -358,11 +302,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
         v1_folder = os.path.join("data", journal, "v1")
         v2_folder = os.path.join("data", journal, "v2")
 
-        # Only extract diffs if analyzer is not provided
-        if analyzer is None:
-            print(f"Analyzing changes between {v1_folder} and {v2_folder} files...")
-            analyzer = extract_and_save_diffs(v1_folder, v2_folder, "processed", journal, progress_step=500)
-        
+        print(f"Analyzing changes between {v1_folder} and {v2_folder} files...")
+        analyzer = extract_and_save_diffs(v1_folder, v2_folder, "processed/diffs.jsonl", progress_step=500)
         predictor = XMLRAGPredictor(persist_dir="vectorstore")
         try:
             print("\nTraining RAG model (this may take a few minutes)...")
@@ -465,70 +406,27 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
         await asyncio.gather(*tasks, return_exceptions=True)
 
 # Usage example (do NOT replace main workflow):
-# analyzer = load_analyzer_from_diffs(journal="mnras") use this whenever we need to skip the prediction generation
+# analyzer = load_analyzer_from_diffs() use this whenever we need to skip the prediction generation
 # ... use 'analyzer' for pattern predictions ...
 
-def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
-    """
-    Load and aggregate processed diffs for analysis.
-    If journal is specified, only load diffs for that journal.
-    
-    Args:
-        journal: Optional journal name to filter diffs
-    """
+def load_analyzer_from_diffs():
+    """Aggregate all processed/diffs_*.jsonl for use in prediction/analysis."""
     analyzer = ChangeAnalyzer()
-    processed_dir = "processed"
-    
-    if not os.path.exists(processed_dir):
-        logger.warning(f"No processed directory found at {processed_dir}")
-        return analyzer
-    
-    # If journal is specified, only process that journal's directory
-    if journal:
-        journal_dirs = [os.path.join(processed_dir, journal)]
-    else:
-        # Otherwise process all journals
-        journal_dirs = [
-            os.path.join(processed_dir, d) 
-            for d in os.listdir(processed_dir)
-            if os.path.isdir(os.path.join(processed_dir, d))
-        ]
-    
-    total_files = 0
+    import glob
+    files = sorted(glob.glob("processed/diffs_*.jsonl"))
+    total_files = len(files)
     lines = 0
-    
-    for journal_dir in journal_dirs:
-        if not os.path.isdir(journal_dir):
-            logger.warning(f"Skipping non-directory: {journal_dir}")
-            continue
-            
-        # Find all diff files for this journal
-        diff_files = sorted(glob.glob(os.path.join(journal_dir, 'diffs_*.jsonl'))) or \
-                    sorted(glob.glob(os.path.join(journal_dir, 'diffs.jsonl*')))
-        
-        for diff_file in diff_files:
-            try:
-                with open(diff_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        try:
-                            entry = json.loads(line)
-                            # Only process entries for the specified journal if filtering
-                            if journal is None or entry.get('journal') == journal:
-                                analyzer.analyze_diff(
-                                    entry['diff'],
-                                    "",  # Original content not needed for analysis
-                                    ""   # New content not needed for analysis
-                                )
-                                lines += 1
-                        except json.JSONDecodeError as e:
-                            logger.warning(f"Error parsing JSON in {diff_file}: {e}")
-                            continue
-                total_files += 1
-            except Exception as e:
-                logger.error(f"Error reading {diff_file}: {e}")
-                continue
-    
-    logger.info(f"Loaded {lines} diffs from {total_files} files for journal: {journal or 'all'}")
+    for file_num, f in enumerate(files, 1):
+        with open(f, 'r', encoding='utf-8') as fh:
+            for line in fh:
+                try:
+                    entry = json.loads(line)
+                    diff = entry.get("diff", [])
+                    analyzer.analyze_diff(diff, "", "")
+                    lines += 1
+                except Exception:
+                    continue
+    print(f"Loaded {lines} diffs from {total_files} files for prediction.")
     return analyzer
 
 if __name__ == "__main__":
@@ -547,28 +445,9 @@ if __name__ == "__main__":
     if not os.path.isdir(journal_dir):
         print(f"Error: Journal data directory '{journal_dir}' does not exist. Exiting.")
         sys.exit(1)
-        
-    # Set up paths with journal name
-    v1_dir = os.path.join(journal_dir, "v1")
-    v2_dir = os.path.join(journal_dir, "v2")
-    output_dir = "processed"
-    
-    # Option 1: Generate new diffs (default)
-    # Comment this block to use existing diffs instead
-    print(f"Analyzing changes between {v1_dir} and {v2_dir} files...")
-    analyzer = extract_and_save_diffs(
-        v1_folder=v1_dir,
-        v2_folder=v2_dir,
-        output_dir=output_dir,
-        journal=args.journal
-    )
 
-    # Option 2: Use existing diffs
-    # Uncomment below to use pre-generated diffs instead of processing files
-    # analyzer = load_analyzer_from_diffs(journal=args.journal)
     try:
-        # Pass the analyzer to run_pipeline to avoid duplicate processing
-        asyncio.run(run_pipeline(analyzer=analyzer, file_path=args.file, journal=args.journal))
+        asyncio.run(run_pipeline(file_path=args.file, journal=args.journal))
     except KeyboardInterrupt:
         print("\nOperation cancelled by user")
     except Exception as e:

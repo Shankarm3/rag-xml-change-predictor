@@ -5,14 +5,15 @@ from langchain.chains import RetrievalQA
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import logging
 from pathlib import Path
-from typing import List, Any, Optional, Set, Dict, Tuple
+from typing import List, Dict, Any, Optional, Set
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from functools import lru_cache
 import aiofiles
+import numpy as np
 import os
 import chromadb
 from chromadb.config import Settings
-import re
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -212,7 +213,7 @@ class XMLRAGPredictor:
                 return result
                 
             except asyncio.TimeoutError:
-                logger.warning(f"Prediction timed out after {timeout} seconds")
+                # logger.warning(f"Prediction timed out after {timeout} seconds")
                 return ""
                 
         except Exception as e:
@@ -220,126 +221,65 @@ class XMLRAGPredictor:
             return ""
 
     async def _predict_changes_in_chunks(self, content: str, max_predictions: int, timeout: int) -> str:
-        """Process large content in chunks with proper XML handling."""
+        """Process large content in chunks."""
         try:
             from lxml import etree
-            import asyncio
-            
-            if not content.strip():
-                return ""
-                
-            # Try to parse as XML first
-            try:
-                parser = etree.XMLParser(recover=True, remove_blank_text=True)
-                wrapped_content = self._wrap_xml_content(content)
-                root = etree.fromstring(wrapped_content.encode(), parser=parser)
-                chunks = [etree.tostring(elem, encoding='unicode', pretty_print=True) 
-                         for elem in root if elem.text and elem.text.strip()]
-                
-                if len(chunks) > 1:
-                    # Process XML elements as chunks
-                    results = []
-                    chunk_timeout = max(30, timeout // max(1, len(chunks)))
-                    
-                    for chunk in chunks:
-                        try:
-                            chunk_result = await asyncio.wait_for(
-                                self.predict_changes(
-                                    chunk, 
-                                    max_predictions=max(1, max_predictions // len(chunks)),
-                                    timeout=chunk_timeout
-                                ),
-                                timeout=chunk_timeout
-                            )
-                            if chunk_result and chunk_result.strip():
-                                results.append(chunk_result.strip())
-                        except Exception as e:
-                            logger.warning(f"Error processing XML chunk: {str(e)}")
-                            continue
-                    
-                    return self._deduplicate_results(results, max_predictions)
-                    
-            except (etree.XMLSyntaxError, etree.ParseError) as e:
-                logger.debug(f"Falling back to text chunking: {str(e)}")
-                
-            # Fallback to text-based chunking
+            parser = etree.XMLParser(recover=True)
+            root = etree.fromstring(f"<root>{content}</root>".encode(), parser=parser)
+            chunks = [etree.tostring(elem, encoding='unicode') for elem in root]
+            if len(chunks) > 1:
+                pass
+            else:
+                raise Exception("Couldn't split by XML elements")
+        except Exception:
             chunk_size = 3000 
             chunks = [content[i:i+chunk_size] for i in range(0, len(content), chunk_size)]
-            results = []
-            chunk_timeout = max(30, timeout // max(1, len(chunks)))
-            
-            for chunk in chunks:
-                try:
-                    chunk_result = await asyncio.wait_for(
-                        self.predict_changes(
-                            chunk,
-                            max_predictions=max(1, max_predictions // len(chunks)),
-                            timeout=chunk_timeout
-                        ),
-                        timeout=chunk_timeout
-                    )
-                    if chunk_result and chunk_result.strip():
-                        results.append(chunk_result.strip())
-                except Exception as e:
-                    logger.warning(f"Error processing text chunk: {str(e)}")
-                    continue
-            
-            return self._deduplicate_results(results, max_predictions)
-            
-        except Exception as e:
-            logger.error(f"Error in chunked prediction: {str(e)}", exc_info=True)
-            return ""
-
-    def _wrap_xml_content(self, content: str) -> str:
-        """Ensure content has a single root element."""
-        content = content.strip()
-        if not content:
-            return "<root></root>"
-            
-        # Check if it's a complete XML document
-        if content.startswith('<?xml'):
-            return content
-            
-        # Check if it has a root element
-        if re.match(r'^\s*<[^>]+>.*</[^>]+>\s*$', content, re.DOTALL):
-            return content
-            
-        return f"<root>{content}</root>"
-
-    def _deduplicate_results(self, results: List[str], max_results: int) -> str:
-        """Remove duplicate and similar results."""
+        
+        results = []
+        chunk_timeout = max(30, timeout // max(1, len(chunks)))
+        # chunk_timeout = 1
+        
+        for i, chunk in enumerate(chunks):
+            logger.info(f"Processing chunk {i+1}/{len(chunks)}")
+            try:
+                chunk_result = await self.predict_changes(
+                    chunk, 
+                    max_predictions=max(1, max_predictions // len(chunks)),
+                    timeout=chunk_timeout
+                )
+                if chunk_result and chunk_result.strip():
+                    results.append(chunk_result.strip())
+            except Exception as e:
+                logger.warning(f"Error processing chunk {i+1}: {str(e)}")
+        
         unique_results = []
         seen = set()
         for res in results:
-            res = res.strip()
             if res and res not in seen:
                 seen.add(res)
                 unique_results.append(res)
-                if len(unique_results) >= max_results:
+                if len(unique_results) >= max_predictions:
                     break
-        return "\n\n".join(unique_results)
+        
+        return "\n".join(unique_results)
 
     def _generate_optimized_prompt(self, v1_content: str, max_predictions: int) -> str:
         """Generate a more efficient prompt for change prediction."""
-        # Use first 5000 chars but try to end at a tag boundary
-        truncated = v1_content[:5000]
-        last_gt = truncated.rfind('>')
-        if last_gt > 0:
-            truncated = truncated[:last_gt+1]
+        truncated_content = v1_content[:6000]
         
-        return f"""Analyze this XML and list up to {max_predictions} most likely changes.
+        return f"""
+Analyze this XML and list up to {max_predictions} most likely changes.
 Focus on:
 1. Structural changes (add/remove elements)
 2. Attribute modifications
 3. Content updates
-4. Common patterns from previous changes
-
-Return results in this format:
-- [ACTION] [XPATH]: [DESCRIPTION]
 
 XML (truncated):
-{truncated}
-"""
+{truncated_content}
+
+Format each change concisely in one line:
+- [CHANGE_TYPE] [XPATH] | Current: [VALUE] | Suggested: [NEW_VALUE]
+""".strip()
 
     async def close(self):
         """Clean up resources."""

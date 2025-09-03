@@ -3,7 +3,7 @@ import glob
 import json
 from collections import defaultdict
 from typing import List, Dict, Tuple
-from utils.xml_diff import compare_xml_files, compute_diff, read_xml, get_xpath
+from utils.xml_diff import compute_diff, read_xml, get_xpath
 from app.rag_predictor import XMLRAGPredictor
 import asyncio
 from pathlib import Path
@@ -140,10 +140,8 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
                 # Try deep diff (if model/API available), else fallback to classic
                 # from utils.xml_diff import compute_diff_deep
                 # diff = compute_diff_deep(v1_path, v2_path)
-                # diff = compare_xml_files(v1_path, v2_path)
                 
                 diff = compute_diff(v1_path, v2_path)
-                
                 
                 if diff:
                     analyzer.analyze_diff(diff, v1_content, v2_content)
@@ -161,7 +159,7 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
                         current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
                         out = open(current_output, 'w', encoding='utf-8')
                         lines_written = 0
-
+                
                 processed_files += 1
                 
                 if idx % progress_step == 0 or idx == total:
