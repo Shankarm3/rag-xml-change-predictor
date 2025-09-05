@@ -1,0 +1,1995 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<doc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aptaraAttr="http://www.aptara.com/xmlns/id/attr" zoom="100" xsi:noNamespaceSchemaLocation="tbml-oup.xsd">
+    <metadata projectName="OUP" category="MNRASL">
+        <meta name="article-type">research-article</meta>
+        <meta name="publisher-id">slaf058</meta>
+        <meta name="arxiv">arXiv:2504.13070</meta>
+        <meta name="category-oup-series">NA</meta>
+        <meta name="category-subject-doi">NA</meta>
+        <meta name="category-taxonomy-collection">AcademicSubjects/SCI00020</meta>
+        <meta name="category-taxonomy-collection1">NA</meta>
+        <meta name="doi">10.1093/mnrasl/slaf058</meta>
+        <meta name="pub-date-ppub">00-00-2025</meta>
+        <meta name="pub-date-epub">00-00-2025</meta>
+        <meta name="pub-date-collection">00-00-2025</meta>
+        <meta name="cover-date">00-00-2025</meta>
+        <meta name="volume">00</meta>
+        <meta name="issue">0</meta>
+        <meta name="fpage">1</meta>
+        <meta name="lpage">1</meta>
+        <meta name="elocation-id">00</meta>
+        <meta name="copyright-statement">© 2025 The Author(s). Published by Oxford University Press on behalf of Royal Astronomical Society. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (https://creativecommons.org/licenses/by/4.0/), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited.</meta>
+        <meta name="copyright-year">2025</meta>
+        <meta name="corrected-typeset">00-00-0000</meta>
+        <meta name="meta-name" exinfo="M1">cover-date</meta>
+        <meta name="meta-value">05 06 2025</meta>
+        <meta name="self-uri" exinfo="">slaf058.pdf</meta>
+        <meta name="feature-fig-label-1">NA</meta>
+        <meta name="feature-fig-image-1" exinfo="IMG">NA</meta>
+        <meta name="feature-fig-label-2">NA</meta>
+        <meta name="feature-fig-image-2" exinfo="IMG">NA</meta>
+        <meta name="feature-fig-label-3">NA</meta>
+        <meta name="feature-fig-image-3" exinfo="IMG">NA</meta>
+        <meta name="source-wc">79|5053|26135|31298</meta>
+        <meta name="display-buttons">true</meta>
+        <meta name="audiovirtualpath">https://web.powerxeditor.com/pxestore/assets/pxeoup/MNRASL/media/audio/</meta>
+        <meta name="videovirtualpath">https://web.powerxeditor.com/pxestore/assets/pxeoup/MNRASL/media/video/</meta>
+        <meta name="graphicvirtualpath">https://web.powerxeditor.com/pxestore/assets/pxeoup/MNRASL/image/</meta>
+        <meta name="cssvirtualpath">https://web.powerxeditor.com/PXE5XMLTool/Default/TBML5032/css/tbml-oup-MNRAS.css</meta>
+        <meta name="wordcountinfo">word:C-4981,S-4981;char:C-31284,S-31284;charwithspace:C-31284,S-31284;para:C-79,S-79;changeper:+0</meta>
+        <meta name="revisioninfo">userid:164,revid:707534,wfid:7,roleid:21</meta>
+        <meta name="wordcountinfo_prev" fID="5">word:C-5053;char:C-26135;charwithspace:C-31299;para:C-79</meta>
+        <meta name="last-update">June 07, 2025 04:02:33 PM</meta>
+        <meta name="query" fID="164" fWflID="7" />
+        <meta name="currentculture">en-us</meta>
+        <meta name="app-img-path">https://web.powerxeditor.com/ED5096_3/Editor/images/</meta>
+    </metadata>
+    <fm>
+        <lrh>Zhaoting Chen</lrh>
+        <rrh>Quadratic estimator for PCA</rrh>
+        <dochead>Article</dochead>
+        <ti>
+            <?tsp type="mode" data="longcopy" skip="true" objectname="custom"?>A quadratic estimator view of the transfer function correction in intensity mapping surveys
+        </ti>
+        <aug sep=" ">
+            <au orcid="http://orcid.org/0000-0002-4965-8239" id="au1">
+                <f>Zhaoting</f>
+                <s>Chen
+                    <?CJK simchi?>(陈兆庭)
+                    <?CJK ?>
+                </s>
+                <sup>
+                    <?xm-author-mappping data='aff1'?>1★
+                </sup>
+            </au>
+        </aug>
+        <aff id="aff1">
+            <number>1</number>
+            <org>Institute for Astronomy, The University of Edinburgh, Royal Observatory</org>,
+            <str>Edinburgh EH9 3HJ</str>,
+            <cny>UK</cny>
+            <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_1">
+                <queryText type="query">Please provide department for affiliation 1 directly in the text.</queryText>
+            </query>
+            <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_2">
+                <queryText type="query">Please check the spelling and accuracy of all author names and affiliations, particularly for any co-authors. Also check that author surnames are correctly highlighted. This is to ensure that forenames and surnames are tagged correctly for online indexing. Incorrect names and affiliations may lead to an author not being credited for their work by funders, institutions, or other third parties. Make any changes directly in the text. Note that changes to your authorship list (adding or removing authors, changing designation of corresponding author) require additional approvals. Email jnls.author.support@oup.com if this is required.</queryText>
+            </query>
+        </aff>
+        <coradd id="cor1">
+            <number>★</number>E-mail:
+            <email href="mailto:zhaoting chen@roe.ac.uk">zhaoting chen@roe.ac.uk</email>
+        </coradd>
+        <hsy sep=";" id="d3e118">
+            <acd>2025 June 3</acd>
+            <rsd>2025 June 2</rsd>
+            <re>2025 April 17</re>
+        </hsy>
+        <absg>
+            <ti>ABSTRACT</ti>
+            <p t="fl">In single dish neutral hydrogen (H
+                <sc>i</sc>) intensity mapping, signal separation methods such as principal component analysis (PCA) are used to clean the astrophysical foregrounds. PCA induces a signal loss in the estimated power spectrum, which can be corrected by a transfer function (TF). By injecting mock signals of H
+                <sc>i</sc> into the data and performing the PCA cleaning, we can use the cleaned mock H
+                <sc>i</sc> signal to cross-correlate with the original mock, and estimate the signal loss as a TF,
+                <latex src="slaf058_ieqn001.gif" id="tex1">
+                    <?TeX $\mathcal {T}(\bm {k})$?>
+                </latex>. As expected, a correction of
+                <latex src="slaf058_ieqn002.gif" id="tex2">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> restores the cross-power between the H
+                <sc>i</sc> and optical galaxies. However, contrary to intuition, the H
+                <sc>i</sc> autopower also requires a
+                <latex src="slaf058_ieqn003.gif" id="tex3">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> correction, not
+                <latex src="slaf058_ieqn004.gif" id="tex4">
+                    <?TeX $\mathcal {T}(\bm {k})^{-2}$?>
+                </latex>. The
+                <latex src="slaf058_ieqn005.gif" id="tex5">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> correction is only known empirically through simulations. In this Letter, we show that the
+                <latex src="slaf058_ieqn006.gif" id="tex6">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> correction in autopower is universal, and can be analytically proven using the quadratic estimator formalism through window function normalization. The normalization can also be used to determine the TF correction for any type of linear process. Using the window function, we demonstrate that PCA induces mode-mixing in the power spectrum estimation, which may lead to biases in the model inference.
+                <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_4">
+                    <queryText type="query">If you refer to any data bases in your paper, please note the journal policy for properly crediting those responsible for compiling the data base. Rather than citing only a URL, if at all possible please also cite a reference (and include it in the reference list), or if a reference is not available then the names of those who compiled the data base. Note that some data bases do provide guidelines on how they should be cited - please check for these and follow them in your paper where appropriate. Please make any changes directly in the text.</queryText>
+                </query>
+            </p>
+        </absg>
+        <kwg sep=" – " id="a87">
+            <kwd>methods: data analysis</kwd>
+            <kwd>methods: statistical</kwd>
+            <kwd>large scale structure of Universe</kwd>
+            <kwd>cosmology: observations</kwd>
+            <kwd>radio lines: general
+                <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_5">
+                    <queryText type="query">The MNRAS list of approved key words has been revised and updated. In the keywords section, click on 'Verify Keywords' to review the new list of keywords. If you had previously selected key words from the old list, please now check them carefully against the new list in case they need to be changed, or there are new ones that you would like to add. If you had not previously selected key words from the MNRAS approved list, please now choose up to six from the new list. Please make any changes directly in the text.</queryText>
+                </query>
+            </kwd>
+        </kwg>
+    </fm>
+    <bdy>
+        <h1 id="sec1" type="intro">
+            <number>1</number>
+            <ti>INTRODUCTION</ti>
+        </h1>
+        <p t="fl">Neutral hydrogen (H
+            <sc>i</sc>) intensity mapping (e.g. Bharadwaj, Nath &amp; Sethi
+            <link rid="bib3" id="link_d3e2343" class="bibcit" sn="3">2001</link>; Battye, Davies &amp; Weller
+            <link rid="bib2" id="link_d3e2374" class="bibcit" sn="2">2004</link>; Chang et al.
+            <link rid="bib5" id="link_d3e2405" class="bibcit" sn="5">2008</link>) is an emerging probe for the large-scale structure (LSS) of the Universe.
+            <query id="pxeoup_MNRASL_55532_284_5_163cc_14" type="query" fRole="Copy Editor Aptara" fWflID="5" fID="284" tWflID="8" tRole="Author" tID="0" tName="" fName="Aravind Kumar" exinfo="ShowQuery">
+                <queryText type="query" postedOn="07Jun25-02:31">Author: Please note that it is journal style to refer to `our' Universe with a capital `U' and to model universes with a lowercase `u'. Please check that all the notations in this paper are correct and make changes, if any, directly in the text.</queryText>
+            </query> H
+            <sc>i</sc> resides mostly inside galaxies after cosmic reionization (e.g. Villaescusa-Navarro et al.
+            <link rid="bib19" id="link_d3e2476" class="bibcit" sn="19">2018</link>), and can be measured using the 21 cm line.
+            <query id="pxeoup_MNRASL_55532_284_5_154ea_15" type="query" fRole="Copy Editor Aptara" fWflID="5" fID="284" tWflID="8" tRole="Author" tID="0" tName="" fName="Aravind Kumar" exinfo="ShowQuery">
+                <queryText type="query" postedOn="07Jun25-02:32">Author: Please note that it is journal style to refer to `our' Galaxy with a capital `G' (e.g. in case of Galaxy, Galactic Centre or Galactocentric) and to other galaxies with a lowercase `g'. Please check that all the notations in this paper are correct and make changes, if any, directly in the text.</queryText>
+            </query> Tremendous progress has been made towards detecting the H
+            <sc>i</sc> clustering in the post-reionization Universe (e.g. Masui et al.
+            <link rid="bib10" id="link_d3e2537" class="bibcit" sn="10">2013</link>; Switzer et al.
+            <link rid="bib15" id="link_d3e2568" class="bibcit" sn="15">2013</link>; Anderson et al.
+            <link rid="bib1" id="link_d3e2599" class="bibcit" sn="1">2018</link>; Wolz et al.
+            <link rid="bib24" id="link_d3e26210" class="bibcit" sn="24">2022</link>). In particular, the recent measurement from the MeerKAT Large Area Synoptic Survey (MeerKLASS; Santos et al.
+            <link rid="bib14" id="link_d3e26611" class="bibcit" sn="14">2016</link>)
+            <i>L</i>-band deep-field data reported in MeerKLASS Collaboration (
+            <link rid="bib11" id="link_d3e26912" class="bibcit" sn="11">2025</link>), hereafter
+            <link rid="bib11" id="link_d3e27213" class="bibcit" sn="11">MK25</link>, produces a cross-correlation detection.
+        </p>
+        <p t="i">A key technique for enabling the measurements of the H
+            <sc>i</sc> clustering is blind foreground removal (e.g. Wolz et al.
+            <link rid="bib23" id="link_d3e28014" class="bibcit" sn="23">2014</link>). The foregrounds in the radio waveband consist mainly of Galactic synchrotron radiation (e.g. Remazeilles et al.
+            <link rid="bib13" id="link_d3e28315" class="bibcit" sn="13">2015</link>) and extragalactic radio sources (e.g. Condon et al.
+            <link rid="bib7" id="link_d3e28616" class="bibcit" sn="7">1998</link>), which are orders of magnitude brighter than the H
+            <sc>i</sc>. The foregrounds are spectrally smooth and therefore can be distinguished from the H
+            <sc>i</sc> signal. In reality, however, observational systematics such as calibration errors and chromatic instrument beam couple with the sky signal, which complicate the spectral structure of the data (see Chen et al.
+            <link rid="bib6" id="link_d3e29617" class="bibcit" sn="6">2025</link> in the case of MeerKLASS) and call for blind signal separation methods. The most commonly used method for foreground removal is principal component analysis (PCA). Given an intensity mapping data cube that is mean-centred in each frequency channel,
+            <latex src="slaf058_ieqn007.gif" id="tex7">
+                <?TeX $m(\bm {l},f)$?>
+            </latex>, where
+            <latex src="slaf058_ieqn008.gif" id="tex8">
+                <?TeX $\bm {l}$?>
+            </latex> is the sky coordinate and
+            <latex src="slaf058_ieqn009.gif" id="tex9">
+                <?TeX $f$?>
+            </latex> is the observing frequency, we can calculate the frequency–frequency covariance of the data,
+        </p>
+        <eqn id="equ1" sn="1">
+            <number>1</number>
+            <latex src="slaf058_eqn001.gif">
+                <?TeX \fontsize{7.5}{9.5}\selectfont{\begin{eqnarray*}
+\mathbfss{C}_{f_1f_2} = {\sum _{i=1}^{N_\theta } \bigg [(w\, m)(\bm {l}_i,f_1)\times (w\, m)(\bm {l}_i,f_2)\bigg ] }\Big /{\sum _{i=1}^{N_\theta } \bigg [w(\bm {l}_i,f_1)w(\bm {l}_i,f_2)\bigg ] },  
+\end{eqnarray*}}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn010.gif" id="tex10">
+                <?TeX $i$?>
+            </latex> iterates over each pixel in the angular plane,
+            <latex src="slaf058_ieqn011.gif" id="tex11">
+                <?TeX $N_\theta$?>
+            </latex> is the total number of pixels, and
+            <latex src="slaf058_ieqn012.gif" id="tex12">
+                <?TeX $w(\bm {l}_i,f)$?>
+            </latex> is the weight of each cube voxel.
+        </p>
+        <p t="i">Using the frequency–frequency covariance, we can perform an eigen decomposition and retrieve the eigenvectors of
+            <latex src="slaf058_ieqn013.gif" id="tex13">
+                <?TeX $\mathbfss{C}_{f_1f_2}$?>
+            </latex>,
+            <latex src="slaf058_ieqn014.gif" id="tex14">
+                <?TeX $[\bm {v}_1,\bm {v}_2,...\bm {v}_{N_f}]$?>
+            </latex>, where
+            <latex src="slaf058_ieqn015.gif" id="tex15">
+                <?TeX $N_f$?>
+            </latex> is the total number of frequency channels. The eigenvectors are ranked from the largest eigenvalue to the smallest. Assuming that the first
+            <latex src="slaf058_ieqn016.gif" id="tex16">
+                <?TeX $N_{\rm fg}$?>
+            </latex> eigenmodes contain all the foreground emission, we can form a matrix
+            <latex src="slaf058_ieqn017.gif" id="tex17">
+                <?TeX $\mathbfss{R}^{\rm PCA}$?>
+            </latex> so that
+            <query id="pxeoup_MNRASL_55532_284_5_1c6a2_16" type="query" fRole="Copy Editor Aptara" fWflID="5" fID="284" tWflID="8" tRole="Author" tID="0" tName="" fName="Aravind Kumar" exinfo="ShowQuery">
+                <queryText type="query" postedOn="07Jun25-02:36">Author: Please note that the MNRAS style for vectors is bold italic (bold roman for uppercase Greek letters), and the style for matrices is bold roman sans serif (bold for Greek letters). Please check throughout that all have been set correctly and make changes, if any, directly in the text.</queryText>
+            </query>
+        </p>
+        <eqn id="equ2" sn="2">
+            <number>2</number>
+            <latex src="slaf058_eqn002.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{R}^{\rm PCA} = \mathbfss{I}-\sum _{m=1}^{N_{\rm fg}} \bm {v}_m\bm {v}_m^{\rm T},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn018.gif" id="tex18">
+                <?TeX $\mathbfss{I}$?>
+            </latex> denotes the identity matrix and
+            <latex src="slaf058_ieqn019.gif" id="tex19">
+                <?TeX $^{\rm T}$?>
+            </latex> denotes the transpose of a matrix. The cleaned map can then be calculated by multiplying the PCA matrix on the map data vector so that
+        </p>
+        <eqn id="equ3" sn="3">
+            <number>3</number>
+            <latex src="slaf058_eqn003.gif">
+                <?TeX \begin{eqnarray*}
+m_{\rm clean} (l,m,f_i) = \sum _j \mathbfss{R}^{\rm PCA}_{ij}\, m(l,m,f_j),  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn020.gif" id="tex20">
+                <?TeX $j$?>
+            </latex> loops over each frequency channel and
+            <latex src="slaf058_ieqn021.gif" id="tex21">
+                <?TeX $_{ij}$?>
+            </latex> denotes the element of a matrix at the
+            <latex src="slaf058_ieqn022.gif" id="tex22">
+                <?TeX $i^{\rm th}$?>
+            </latex> row and
+            <latex src="slaf058_ieqn023.gif" id="tex23">
+                <?TeX $j^{\rm th}$?>
+            </latex> column.
+        </p>
+        <p t="i">For a sufficiently large number of modes
+            <latex src="slaf058_ieqn024.gif" id="tex24">
+                <?TeX $N_{\rm fg}$?>
+            </latex>, foregrounds should be strongly suppressed, and the residual map
+            <latex src="slaf058_ieqn025.gif" id="tex25">
+                <?TeX $m_{\rm clean}$?>
+            </latex> can be used to estimate the H
+            <sc>i</sc> power spectrum. However, removing the eigenmodes from the map also introduces signal loss. To quantify the signal loss, a signal injection-based transfer function (TF) approach has been proposed (Switzer et al.
+            <link rid="bib16" id="link_d3e42818" class="bibcit" sn="16">2015</link>). Given a mock signal
+            <latex src="slaf058_ieqn026.gif" id="tex26">
+                <?TeX $m_{\rm \textrm {H\textsc {i}}}$?>
+            </latex>, we can inject the signal into the original map data
+            <latex src="slaf058_ieqn027.gif" id="tex27">
+                <?TeX $m$?>
+            </latex>, and recalculate the PCA matrix to perform the cleaning to get the residual
+            <latex src="slaf058_ieqn028.gif" id="tex28">
+                <?TeX $m_{\rm clean}$?>
+            </latex>. The TF correction can be calculated as (Cunnington et al.
+            <link rid="bib8" id="link_d3e44719" class="bibcit" sn="8">2023</link>)
+        </p>
+        <eqn id="equ4" sn="4">
+            <number>4</number>
+            <latex src="slaf058_eqn004.gif">
+                <?TeX \begin{eqnarray*}
+\mathcal {T}_{\rm \textrm {H\textsc {i}}}(\bm {k}) = \bigg \langle \frac{\mathcal {P}[m_{\rm clean},m_{\rm \textrm {H\textsc {i}}}]}{\mathcal {P}[m_{\rm \textrm {H\textsc {i}}},m_{\rm \textrm {H\textsc {i}}}]}\bigg \rangle ,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn029.gif" id="tex29">
+                <?TeX $\mathcal {P}[,]$?>
+            </latex> denotes the operation of estimating the power spectrum by cross-correlating two fields and
+            <latex src="slaf058_ieqn030.gif" id="tex30">
+                <?TeX $\langle \rangle$?>
+            </latex> denotes the ensemble average over a number of realizations of mock. Similarly, given a H
+            <sc>i</sc> mock signal and a corresponding galaxy mock density field
+            <latex src="slaf058_ieqn031.gif" id="tex31">
+                <?TeX $m_{\rm g}$?>
+            </latex>, the TF for the cross-power spectrum can be calculated as
+        </p>
+        <eqn id="equ5" sn="5">
+            <number>5</number>
+            <latex src="slaf058_eqn005.gif">
+                <?TeX \begin{eqnarray*}
+\mathcal {T}_{\rm \textrm {H\textsc {i}},g}(\bm {k}) = \bigg \langle \frac{\mathcal {P}[m_{\rm clean},m_{\rm g}]}{\mathcal {P}[m_{\rm \textrm {H\textsc {i}}},m_{\rm g}]}\bigg \rangle .  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="i"> Cunnington et al. (
+            <link rid="bib8" id="link_d3e48620" class="bibcit" sn="8">2023</link>), hereafter
+            <link rid="bib8" id="link_d3e48921" class="bibcit" sn="8">C23</link>, find surprising properties of the TF. First, it is found that for both cross-power and autopower, a correction of
+            <latex src="slaf058_ieqn032.gif" id="tex32">
+                <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+            </latex>, multiplied on the estimated power spectrum after PCA cleaning, restores the correct amplitude of the underlying signal. The conclusion is intuitive for cross-power. However, for autopower, it is expected that
+            <latex src="slaf058_ieqn033.gif" id="tex33">
+                <?TeX $\mathcal {T}(\bm {k})^{-2}$?>
+            </latex> is needed instead of
+            <latex src="slaf058_ieqn034.gif" id="tex34">
+                <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+            </latex>, as the TF defined in equation  (
+            <link rid="equ4" id="link_d3e50822" class="eqncit" sn="4">4</link>) is a cross-correlation between the cleaned and original mock signal, whereas the autopower is the autocorrelation of the cleaned signal. Secondly, it is found that if the autopower is calculated by cross-correlating two data sets of the same H
+            <sc>i</sc> signal with foregrounds that are perturbed by different systematics (see fig. 12 of
+            <link rid="bib8" id="link_d3e51423" class="bibcit" sn="8">C23</link>), the signal correction is further complicated and deviates from both
+            <latex src="slaf058_ieqn035.gif" id="tex35">
+                <?TeX $\mathcal {T}(\bm {k})^{-2}$?>
+            </latex> and
+            <latex src="slaf058_ieqn036.gif" id="tex36">
+                <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+            </latex> corrections.
+        </p>
+        <p t="i">In this Letter, we review the TF correction through the quadratic estimator formalism (Tegmark
+            <link rid="bib17" id="link_d3e52924" class="bibcit" sn="17">1997</link>). We show that the signal loss correction can be understood as a window function normalization, and link the normalization to the TF analytically. The analytical expression of the TF is used to prove the
+            <latex src="slaf058_ieqn037.gif" id="tex37">
+                <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+            </latex> correction in the autopower, with numerical validations.
+        </p>
+        <h1 id="sec2">
+            <number>2</number>
+            <ti>QUADRATIC ESTIMATOR</ti>
+        </h1>
+        <h2 id="sec2-1">
+            <number>2.1</number>
+            <ti>Fourier convention</ti>
+        </h2>
+        <p t="fl">We start with choosing a Fourier convention. The Fourier transform of an arbitrary function in a 3D rectangular box,
+            <latex src="slaf058_ieqn038.gif" id="tex38">
+                <?TeX $f(\bm {x})$?>
+            </latex>, and its corresponding inverse transform, can be written as
+        </p>
+        <eqn sn="6" id="update1749307590399">
+            <number>6</number>
+            <latex src="/slaf058_peqn_679191545.gif" id="eqn_1d3f1-17b2f">
+                <?TeX \begin{eqnarray*}
+\tilde{f}(\bm {k}) = \int \frac{{\rm d}^3\bm {x}}{V} \, {\rm e}^{-i\, \bm {k}\cdot \bm {x}} f(\bm {x}), \, f(\bm {x}) = V \int \frac{{\rm d}^3\bm {k}}{(2\pi)^3} \, {\rm e}^{i\, \bm {k}\cdot \bm {x}} \tilde{f}(\bm {k}),  
+\end{eqnarray*}?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn039.gif" id="tex39">
+                <?TeX $\bm {k}$?>
+            </latex> is the 3D wavenumber vector and
+            <latex src="slaf058_ieqn040.gif" id="tex40">
+                <?TeX $V$?>
+            </latex> is the volume of the box.
+        </p>
+        <p t="i">For a tracer of dark matter
+            <latex src="slaf058_ieqn041.gif" id="tex41">
+                <?TeX $t$?>
+            </latex>, the tracer field in a 3D rectangular box can be expressed as a data vector
+            <latex src="slaf058_ieqn042.gif" id="tex42">
+                <?TeX $\bm {d}_t$?>
+            </latex>, whose
+            <latex src="slaf058_ieqn043.gif" id="tex43">
+                <?TeX $i^{\rm th}$?>
+            </latex> element is the value of the
+            <latex src="slaf058_ieqn044.gif" id="tex44">
+                <?TeX $i^{\rm th}$?>
+            </latex> grid at
+            <latex src="slaf058_ieqn045.gif" id="tex45">
+                <?TeX $\bm {x}_i$?>
+            </latex>. The Fourier transform of the tracer field,
+            <latex src="slaf058_ieqn046.gif" id="tex46">
+                <?TeX $\tilde{\bm {d}}_t$?>
+            </latex>, can be written as
+        </p>
+        <eqn id="equ7" sn="7">
+            <number>7</number>
+            <latex src="slaf058_eqn007.gif">
+                <?TeX \begin{eqnarray*}
+\tilde{\bm {d}}_t = \mathcal {F}\, \bm {d}_t,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn047.gif" id="tex47">
+                <?TeX $\mathcal {F}$?>
+            </latex> is the discrete Fourier transform (DFT) matrix. By discretizing equation  (
+            <link rid="update1749307590399" id="link_d3e61825" class="eqncit" sn="6">6</link>), we can see that
+        </p>
+        <eqn id="equ8" sn="8">
+            <number>8</number>
+            <latex src="slaf058_eqn008.gif">
+                <?TeX \begin{eqnarray*}
+\big [\mathcal {F}\big ]_{ij} = \frac{1}{N} \, {\rm e}^{-i\, \bm {k}_i\cdot \bm {x}_j},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn048.gif" id="tex48">
+                <?TeX $[]_{ij}$?>
+            </latex> denotes the element of a matrix at the
+            <latex src="slaf058_ieqn049.gif" id="tex49">
+                <?TeX $i^{\rm th}$?>
+            </latex> row and
+            <latex src="slaf058_ieqn050.gif" id="tex50">
+                <?TeX $j^{\rm th}$?>
+            </latex> column, and
+            <latex src="slaf058_ieqn051.gif" id="tex51">
+                <?TeX $N$?>
+            </latex> is the total number of grid points in the box. Note that the factor of
+            <latex src="slaf058_ieqn052.gif" id="tex52">
+                <?TeX $1/N$?>
+            </latex> in equation  (
+            <link rid="equ8" id="link_d3e65526" class="eqncit" sn="8">8</link>) corresponds to the ‘forward’ normalization and is a consequence of the Fourier convention specified in equation  (
+            <link rid="update1749307590399" id="link_d3e65827" class="eqncit" sn="6">6</link>). The inverse DFT matrix can be written as
+        </p>
+        <eqn id="equ9" sn="9">
+            <number>9</number>
+            <latex src="slaf058_eqn009.gif">
+                <?TeX \begin{eqnarray*}
+\big [\mathcal {F}^{-1}\big ]_{ij} = \, {\rm e}^{i\, \bm {k}_i\cdot \bm {x}_j}.  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">It is straightforward to see that </p>
+        <eqn id="equ10" sn="10">
+            <number>10</number>
+            <latex src="slaf058_eqn010.gif">
+                <?TeX \begin{eqnarray*}
+\mathcal {F}^{\dagger }\mathcal {F} = \frac{1}{N}\, \mathbfss{I},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn053.gif" id="tex53">
+                <?TeX $^\dagger$?>
+            </latex> denotes the conjugate transpose of a matrix and
+            <latex src="slaf058_ieqn054.gif" id="tex54">
+                <?TeX $\mathbfss{I}$?>
+            </latex> denotes an identity matrix.
+        </p>
+        <p t="i">For any vector
+            <latex src="slaf058_ieqn055.gif" id="tex55">
+                <?TeX $\bm {v}$?>
+            </latex>, its Fourier transform is
+            <latex src="slaf058_ieqn056.gif" id="tex56">
+                <?TeX $\tilde{\bm {v}} = \mathcal {F}\bm {v}$?>
+            </latex>. For any matrix
+            <latex src="slaf058_ieqn057.gif" id="tex57">
+                <?TeX $\mathbfss{M}$?>
+            </latex>, its Fourier transform can be defined as
+        </p>
+        <eqn id="equ11" sn="11">
+            <number>11</number>
+            <latex src="slaf058_eqn011.gif">
+                <?TeX \begin{eqnarray*}
+\widetilde {\mathbfss{M}} = \mathcal {F}\, \mathbfss{M}\, \mathcal {F}^{-1},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">so that for any matrix
+            <latex src="slaf058_ieqn058.gif" id="tex58">
+                <?TeX $\mathbfss{M}$?>
+            </latex> and vector
+            <latex src="slaf058_ieqn059.gif" id="tex59">
+                <?TeX $\bm {v}$?>
+            </latex>,
+            <latex src="slaf058_ieqn060.gif" id="tex60">
+                <?TeX $\widetilde {\mathbfss{M}}\, \tilde{\bm {v}} = \mathcal {F}\, \mathbfss{M}\, \bm {v}$?>
+            </latex>.
+        </p>
+        <h2 id="sec2-2">
+            <number>2.2</number>
+            <ti>Window function</ti>
+        </h2>
+        <p t="fl">We now turn to the quadratic estimator of the power spectrum. For two tracers of dark matter which we denote as
+            <latex src="slaf058_ieqn061.gif" id="tex61">
+                <?TeX $t=1$?>
+            </latex> and
+            <latex src="slaf058_ieqn062.gif" id="tex62">
+                <?TeX $t=2$?>
+            </latex>, the cross-power spectrum of the tracers in the 3D
+            <latex src="slaf058_ieqn063.gif" id="tex63">
+                <?TeX $\bm {k}$?>
+            </latex>-grids is defined as
+        </p>
+        <eqn id="equ12" sn="12">
+            <number>12</number>
+            <latex src="slaf058_eqn012.gif">
+                <?TeX \begin{eqnarray*}
+V \bigg | \big \langle \tilde{d}_{1}(\bm {k}_\alpha)\tilde{d}_{2}^{*}(\bm {k}_\beta) \big \rangle \bigg |_{\rm Re} = \delta ^3_{\rm D}(\bm {k}_\alpha -\bm {k}_\beta)p^{12}_\alpha ,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn064.gif" id="tex64">
+                <?TeX $p^{12}_\alpha$?>
+            </latex> denotes the
+            <i>underlying</i> 3D cross-power spectrum at
+            <latex src="slaf058_ieqn065.gif" id="tex65">
+                <?TeX $\bm {k}_\alpha$?>
+            </latex>,
+            <latex src="slaf058_ieqn066.gif" id="tex66">
+                <?TeX $\tilde{d}_{1,2}$?>
+            </latex> denotes the Fourier transform of the
+            <i>underlying</i> tracer density fields,
+            <latex src="slaf058_ieqn067.gif" id="tex67">
+                <?TeX $^{*}$?>
+            </latex> denotes the complex conjugate,
+            <latex src="slaf058_ieqn068.gif" id="tex68">
+                <?TeX $\langle \rangle$?>
+            </latex> denotes the ensemble average,
+            <latex src="slaf058_ieqn069.gif" id="tex69">
+                <?TeX $||_{\rm re}$?>
+            </latex> denotes the real part of a complex number, and
+            <latex src="slaf058_ieqn070.gif" id="tex70">
+                <?TeX $\delta ^3_{\rm D}$?>
+            </latex> denotes the 3D delta function. Note that, the autopower spectrum is a special case of equation  (
+            <link rid="equ12" id="link_d3e80228" class="eqncit" sn="12">12</link>) when 1 and 2 refer to the same tracer. Equation  (
+            <link rid="equ12" id="link_d3e80529" class="eqncit" sn="12">12</link>) can be written in a compact form,
+        </p>
+        <eqn id="equ13" sn="13">
+            <number>13</number>
+            <latex src="slaf058_eqn013.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{C}_{12} = \frac{V}{2}\big \langle \tilde{\bm {d}}_1 \tilde{\bm {d}}_2^\dagger + \tilde{\bm {d}}_2\tilde{\bm {d}}_1^\dagger \big \rangle = \sum _\alpha \mathbfss{X}_\alpha \, p^{12}_\alpha ,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn071.gif" id="tex71">
+                <?TeX $\mathbfss{X}_\alpha$?>
+            </latex> is the selection matrix that is zero for all elements except at the
+            <latex src="slaf058_ieqn072.gif" id="tex72">
+                <?TeX $\alpha ^{\rm th}$?>
+            </latex> diagonal element,
+        </p>
+        <eqn id="equ14" sn="14">
+            <number>14</number>
+            <latex src="slaf058_eqn014.gif">
+                <?TeX \begin{eqnarray*}
+[\mathbfss{X}_\alpha ]_{ij} = \delta ^{\rm K}_{ij}\delta ^{\rm K}_{i\alpha },  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn073.gif" id="tex73">
+                <?TeX $\delta ^{\rm K}$?>
+            </latex> is the Kronecker delta.
+        </p>
+        <p t="i">The observed tracer density field goes through a chain of linear operations before Fourier transform and cross-correlation. For example, the underlying brightness temperature field of 21 cm line is convolved with the primary beam of the telescope, calibrated by applying calibration solutions, gridded onto a sky map, PCA cleaned, frequency tapered, and finally gridded onto a rectangular grid with inverse noise variance weighting. Since all of these operations are linear, we can collapse them into a matrix
+            <latex src="slaf058_ieqn074.gif" id="tex74">
+                <?TeX $\mathbfss{R}$?>
+            </latex>, and write the quadratic estimator of the power spectrum as
+        </p>
+        <eqn id="equ15" sn="15">
+            <number>15</number>
+            <latex src="slaf058_eqn015.gif">
+                <?TeX \begin{eqnarray*}
+\hat{p}^{12}_\alpha = \bigg |\frac{1}{2}{\bm {d}}_1^\dagger \mathbfss{E}^{12}_\alpha \bm {d}_2\bigg |_{\rm Re},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn075.gif" id="tex75">
+                <?TeX $\mathbfss{E}^{12}_\alpha$?>
+            </latex> is the estimator matrix that can be decomposed as
+        </p>
+        <eqn id="equ16" sn="16">
+            <number>16</number>
+            <latex src="slaf058_eqn016.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{E}^{12}_\alpha = V\, \mathbfss{R}_1^\dagger \mathcal {F}^\dagger \mathbfss{X}_\alpha \, \mathcal {F}\, \mathbfss{R}_2.  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">Recall that
+            <latex src="slaf058_ieqn076.gif" id="tex76">
+                <?TeX $\mathcal {F}\, \mathbfss{R}\, \bm {d} = \widetilde {\mathbfss{R}}\, \tilde{\bm {d}}$?>
+            </latex>, and equation  (
+            <link rid="equ15" id="link_d3e87430" class="eqncit" sn="15">15</link>) can be expanded so that
+        </p>
+        <eqn id="equ17" sn="17">
+            <number>17</number>
+            <latex src="slaf058_eqn017.gif">
+                <?TeX \begin{eqnarray*}
+\begin{split} \hat{p}^{12}_\alpha = \frac{V}{2}\bigg |\tilde{\bm {d}}_1^\dagger \widetilde {\mathbfss{R}}_{1}^\dagger \mathbfss{X}_\alpha \widetilde {\mathbfss{R}}_2\tilde{\bm {d}}_2\bigg |_{\rm Re} = \frac{V}{2}\bigg |{\rm tr}\Big [\widetilde {\mathbfss{R}}_{1}^\dagger \mathbfss{X}_\alpha \widetilde {\mathbfss{R}}_2 \tilde{\bm {d}}_2\tilde{\bm {d}}_1^\dagger \Big ]\bigg |_{\rm Re}, \end{split}  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where tr[] denotes the trace of a matrix.</p>
+        <p t="i">Combined with equation  (
+            <link rid="equ13" id="link_d3e88731" class="eqncit" sn="13">13</link>), the ensemble average of the power spectrum estimator can be calculated so that
+        </p>
+        <eqn id="equ18" sn="18">
+            <number>18</number>
+            <latex src="slaf058_eqn018.gif">
+                <?TeX \begin{eqnarray*}
+ \langle \hat{p}^{12}_\alpha \rangle &=& \frac{1}{2} \bigg | {\rm tr}\Big [\widetilde {\mathbfss{R}}_{1}^\dagger \mathbfss{X}_\alpha \widetilde {\mathbfss{R}}_2\mathbfss{C}_{12} \Big ] \bigg |_{\rm Re} = \frac{1}{2}\sum _\beta \bigg |{\rm tr}\Big [\widetilde {\mathbfss{R}}_{1}^\dagger \mathbfss{X}_\alpha \widetilde {\mathbfss{R}}_2\mathbfss{X}_\beta \Big ]p_\beta ^{12}\bigg |_{\rm Re}\nonumber \\
+&=& \sum _\beta \bigg |(\widetilde {\mathbfss{R}}_1)_{\alpha \beta }(\widetilde {\mathbfss{R}}_2)^{*}_{\alpha \beta }\bigg |_{\rm Re}\, p^{12}_\beta = \sum _\beta \Big (\mathbfss{H}\big [\mathbfss{R}_1,\mathbfss{R}_2\big ]\Big)_{\alpha \beta }\, p^{12}_\beta ,   
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where we obtain the
+            <i>unnormalized</i> window function of the estimator
+            <latex src="slaf058_ieqn077.gif" id="tex77">
+                <?TeX $\mathbfss{H}$?>
+            </latex> as a function of the operation matrices
+            <latex src="slaf058_ieqn078.gif" id="tex78">
+                <?TeX $\mathbfss{R}_1$?>
+            </latex> and
+            <latex src="slaf058_ieqn079.gif" id="tex79">
+                <?TeX $\mathbfss{R}_2$?>
+            </latex>,
+        </p>
+        <eqn id="equ19" sn="19">
+            <number>19</number>
+            <latex src="slaf058_eqn019.gif">
+                <?TeX \begin{eqnarray*}
+\Big (\mathbfss{H}\big [\mathbfss{R}_1,\mathbfss{R}_2\big ]\Big)_{\alpha \beta } \equiv \mathbfss{H}^{\mathbfss{R}_1,\mathbfss{R}_2}_{\alpha \beta } = \bigg |(\widetilde {\mathbfss{R}}_1)_{\alpha \beta }(\widetilde {\mathbfss{R}}_2)^{*}_{\alpha \beta }\bigg |_{\rm Re},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where, from now on, we use the notation of
+            <latex src="slaf058_ieqn080.gif" id="tex80">
+                <?TeX $\mathbfss{H}^{\mathbfss{R}_1,\mathbfss{R}_2}$?>
+            </latex> to indicate the dependence of
+            <latex src="slaf058_ieqn081.gif" id="tex81">
+                <?TeX $\mathbfss{H}$?>
+            </latex> on the operation matrices for simplicity.
+        </p>
+        <p t="i">Equation  (
+            <link rid="equ18" id="link_d3e93732" class="eqncit" sn="18">18</link>) states that, for a quadratic estimator of the power spectrum, the linear operations on the data vector leads to an effective linear operation on the power spectrum data vector, described by the window function
+            <latex src="slaf058_ieqn082.gif" id="tex82">
+                <?TeX $\mathbfss{H}$?>
+            </latex>. Therefore, one can normalize the window function by introducing a matrix
+            <latex src="slaf058_ieqn083.gif" id="tex83">
+                <?TeX $\mathbfss{M}$?>
+            </latex> so that
+        </p>
+        <eqn id="equ20" sn="20">
+            <number>20</number>
+            <latex src="slaf058_eqn020.gif">
+                <?TeX \begin{eqnarray*}
+\hat{p}^{\prime 12}_\alpha = \sum _{\beta } \mathbfss{M}_{\alpha \beta }\, \hat{p}^{12}_\beta ,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">which gives the final window function
+            <latex src="slaf058_ieqn084.gif" id="tex84">
+                <?TeX $\mathbfss{W} = \mathbfss{M}\, \mathbfss{H}$?>
+            </latex>, with
+        </p>
+        <eqn id="equ21" sn="21">
+            <number>21</number>
+            <latex src="slaf058_eqn021.gif">
+                <?TeX \begin{eqnarray*}
+\langle \hat{p}^{\prime 12}_\alpha \rangle =\sum _{\beta } \big (\mathbfss{M}\, \mathbfss{H}\big)_{\alpha \beta }\, {p}^{12}_\beta = \sum _{\beta } \mathbfss{W}_{\alpha \beta }\, p^{12}_\beta .  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">One can choose
+            <latex src="slaf058_ieqn085.gif" id="tex85">
+                <?TeX $\mathbfss{M} = \mathbfss{H}^{-1}$?>
+            </latex> to decorrelate the mode-mixing or
+            <latex src="slaf058_ieqn086.gif" id="tex86">
+                <?TeX $\mathbfss{M} = \mathbfss{H}^{-1/2}$?>
+            </latex> to decorrelate the covariance of the estimator (Tegmark, Hamilton &amp; Xu
+            <link rid="bib18" id="link_d3e98233" class="bibcit" sn="18">2002</link>). In intensity mapping surveys, it is common to simply choose a diagonal matrix so that
+        </p>
+        <eqn id="equ22" sn="22">
+            <number>22</number>
+            <latex src="slaf058_eqn022.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{M}_{\alpha \beta } = \delta ^{\rm K}_{\alpha \beta } \Big (\sum _{\sigma }\mathbfss{H}_{\alpha \sigma }\Big)^{-1} = \mathcal {T}_{\rm true}^{-1}(\bm {k}_\alpha)\delta ^{\rm K}_{\alpha \beta },  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">so that the amplitude of the power spectrum is normalized,
+            <latex src="slaf058_ieqn087.gif" id="tex87">
+                <?TeX $\sum _\beta \mathbfss{W}_{\alpha \beta } = 1$?>
+            </latex>. Such a diagonal matrix is computationally efficient, since instead of performing a matrix multiplication, one can simply perform an element-wise multiplication on the estimated 3D
+            <latex src="slaf058_ieqn088.gif" id="tex88">
+                <?TeX $\bm {k}$?>
+            </latex>-powers. We define the required amplitude correction at each 3D
+            <latex src="slaf058_ieqn089.gif" id="tex89">
+                <?TeX $\bm {k}_\alpha$?>
+            </latex> mode as the true TF correction,
+            <latex src="slaf058_ieqn090.gif" id="tex90">
+                <?TeX $\mathcal {T}_{\rm true}^{-1}(\bm {k}_\alpha)$?>
+            </latex>.
+        </p>
+        <p t="i">Most of the measurements of the H
+            <sc>i</sc> power spectrum in the literature implicitly uses this normalization. For example, a weighting function including the frequency taper and inverse noise variance weighting,
+            <latex src="slaf058_ieqn091.gif" id="tex91">
+                <?TeX $w(\bm {x})$?>
+            </latex>, can be multiplied to the map data. The estimated power spectrum can then be normalized by rescaling the power spectrum by a factor of
+            <latex src="slaf058_ieqn092.gif" id="tex92">
+                <?TeX $N/(\sum _{\bm {x}}w^2(\bm {x}))$?>
+            </latex>, which implicitly incorporates equation  (
+            <link rid="equ22" id="link_d3e102934" class="eqncit" sn="22">22</link>). The normalization also has a desired property,
+        </p>
+        <eqn id="equ23" sn="23">
+            <number>23</number>
+            <latex src="slaf058_eqn023.gif">
+                <?TeX \begin{eqnarray*}
+\mathcal {T}_{\rm true}(\bm {k}_\alpha) = \sum _\sigma \bigg |(\widetilde {\mathbfss{R}}_1)_{\alpha \sigma }(\widetilde {\mathbfss{R}}_2)^{*}_{\alpha \sigma }\bigg |_{\rm Re} = \bigg |\Big (\widetilde {\mathbfss{R}}_1 \widetilde {\mathbfss{R}}_2^\dagger \Big)_{\alpha \alpha } \bigg |_{\rm Re},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">which will be useful for the transfer function calculation, as we show in the following Section
+            <link rid="sec2-3" id="link_d3e104135" class="seccit">2.3</link>.
+        </p>
+        <h2 id="sec2-3">
+            <number>2.3</number>
+            <ti>Transfer function</ti>
+        </h2>
+        <p t="fl">We now discuss the relation between the TF correction and the power spectrum normalization in equation  (
+            <link rid="equ22" id="link_d3e105136" class="eqncit" sn="22">22</link>).
+        </p>
+        <p t="i">In the case of cross-power spectrum, the TF correction is calculated by taking the PCA matrix
+            <latex src="slaf058_ieqn093.gif" id="tex93">
+                <?TeX $\mathbfss{R}^{\rm PCA}$?>
+            </latex>, applying it onto the H
+            <sc>i</sc> data vector,
+            <latex src="slaf058_ieqn094.gif" id="tex94">
+                <?TeX $\bm {d}_1$?>
+            </latex>, and cross-correlating with a mock galaxy overdensity field,
+            <latex src="slaf058_ieqn095.gif" id="tex95">
+                <?TeX $\bm {d}_2$?>
+            </latex>. In the case of autopower spectrum, the TF correction is calculated by again taking the PCA matrix, applying it onto H
+            <sc>i</sc> data vector,
+            <latex src="slaf058_ieqn096.gif" id="tex96">
+                <?TeX $\bm {d}_1$?>
+            </latex>, and cross-correlating with the H
+            <sc>i</sc> data vector itself. In both cases, the TF term can be approximated as
+        </p>
+        <eqn id="equ24" sn="24">
+            <number>24</number>
+            <latex src="slaf058_eqn024.gif">
+                <?TeX \begin{eqnarray*}
+ \mathcal {T}(\bm {k}_\alpha) &=& \bigg \langle \frac{\mathcal {P}[m_{\rm clean},m_{\rm g/\textrm {H\textsc {i}}}]}{\mathcal {P}[m_{\rm \textrm {H\textsc {i}}},m_{\rm g/\textrm {H\textsc {i}}}]}\bigg \rangle \approx \frac{\sum _{\beta } \mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \beta }p^{12}_\beta }{ p^{12}_\alpha } \nonumber\\
+&=&\, \mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \alpha } = \Big |\widetilde {\mathbfss{R}}^{\rm PCA}_{\alpha \alpha }\Big |_{\rm Re} = \mathcal {T}_{\rm true}(\bm {k}_\alpha),   
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where we use the fact that, when
+            <latex src="slaf058_ieqn097.gif" id="tex97">
+                <?TeX $\mathbfss{R}_1 = \mathbfss{R}^{\rm PCA}$?>
+            </latex> and
+            <latex src="slaf058_ieqn098.gif" id="tex98">
+                <?TeX $\mathbfss{R}_2 = \mathbfss{I}$?>
+            </latex>,
+            <latex src="slaf058_ieqn099.gif" id="tex99">
+                <?TeX $\mathbfss{H}$?>
+            </latex> is a diagonal matrix. Note that here the power spectrum
+            <latex src="slaf058_ieqn100.gif" id="tex100">
+                <?TeX $p^{12}_{\alpha }$?>
+            </latex> is the input power spectrum of the mock data vector. In previous work such as
+            <link rid="bib8" id="link_d3e111537" class="bibcit" sn="8">C23</link>, the PCA matrix is re-calculated after mock injection so
+            <latex src="slaf058_ieqn101.gif" id="tex101">
+                <?TeX $\mathbfss{R}^{\rm PCA}$?>
+            </latex> in the TF calculation is different from the
+            <latex src="slaf058_ieqn102.gif" id="tex102">
+                <?TeX $\mathbfss{R}^{\rm PCA}$?>
+            </latex> used for the actual data. The differences in the resulting signal loss are small, since the contribution of the mock H
+            <sc>i</sc> signal is small in the total frequency–frequency covariance. This leads to the approximate equality in the above equation  (
+            <link rid="equ24" id="link_d3e113138" class="eqncit" sn="24">24</link>).
+        </p>
+        <p t="i">We now compare equation  (
+            <link rid="equ24" id="link_d3e113639" class="eqncit" sn="24">24</link>) with the normalization described in equation  (
+            <link rid="equ22" id="link_d3e113940" class="eqncit" sn="22">22</link>). For cross-power, the galaxy overdensity is not PCA cleaned while the H
+            <sc>i</sc> is, giving the normalization
+            <fntg id="fn1" type="num">
+                <fnt id="d3e2176">
+                    <p>Note that, in the approximation of equation  (
+                        <link rid="equ24" id="link_d3e218285" class="eqncit" sn="24">24</link>), the TF terms for cross and auto-power are the same, and we omit the subscripts in
+                        <latex src="slaf058_ieqn221.gif" id="tex221">
+                            <?TeX $\mathcal {T}_{\rm \textrm {H\textsc {i}}}$?>
+                        </latex> and
+                        <latex src="slaf058_ieqn222.gif" id="tex222">
+                            <?TeX $\mathcal {T}_{\rm \textrm {H\textsc {i}},g}$?>
+                        </latex>.
+                    </p>
+                </fnt>
+            </fntg>
+        </p>
+        <eqn id="equ25" sn="25">
+            <number>25</number>
+            <latex src="slaf058_eqn025.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{M}^{\rm \textrm {H\textsc {i}},g}_{\alpha \beta } = \Big (\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA,\mathbfss{I}}}_{\alpha \sigma }\Big)^{-1} \delta ^{\rm K}_{\alpha \beta } \approx \mathcal {T}(\bm {k}_\alpha)^{-1} \delta ^{\rm K}_{\alpha \beta }.  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">As one can see, the required correction to normalize the window function is indeed
+            <latex src="slaf058_ieqn103.gif" id="tex103">
+                <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+            </latex> for the cross-power spectrum. It also provides evidence to the fact that the TF correction is robust against the choice of mock signal modelling, since it does not depend on the mock data vectors.
+        </p>
+        <p t="i">Now we turn to the autopower spectrum, where the normalization according to equation  (
+            <link rid="equ22" id="link_d3e116342" class="eqncit" sn="22">22</link>) gives
+        </p>
+        <eqn id="equ26" sn="26">
+            <number>26</number>
+            <latex src="slaf058_eqn026.gif">
+                <?TeX \begin{eqnarray*}
+\mathbfss{M}^{\rm \textrm {H\textsc {i}}}_{\alpha \beta } = \Big (\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}_{\alpha \sigma }\Big)^{-1} \delta ^{\rm K}_{\alpha \beta },  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where
+            <latex src="slaf058_ieqn104.gif" id="tex104">
+                <?TeX $\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}$?>
+            </latex> denotes the unnormalized window function when
+            <latex src="slaf058_ieqn105.gif" id="tex105">
+                <?TeX $\mathbfss{R}_1 = \mathbfss{R}_2 = \mathbfss{R}^{\rm PCA}$?>
+            </latex>.
+        </p>
+        <p t="i">We now explore the explicit expression of
+            <latex src="slaf058_ieqn106.gif" id="tex106">
+                <?TeX $\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}_{\alpha \sigma }$?>
+            </latex> in equation  (
+            <link rid="equ26" id="link_d3e119143" class="eqncit" sn="26">26</link>) and its relation to
+            <latex src="slaf058_ieqn107.gif" id="tex107">
+                <?TeX $\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \sigma }$?>
+            </latex>. The TF can be expanded by utilizing the decomposition of the PCA matrix described in equation  (
+            <link rid="equ2" id="link_d3e119944" class="eqncit" sn="2">2</link>). We first note that the Fourier transform of
+            <latex src="slaf058_ieqn108.gif" id="tex108">
+                <?TeX $\mathbfss{R}^{\rm PCA}$?>
+            </latex> can be expressed as
+        </p>
+        <eqn id="equ27" sn="27">
+            <number>27</number>
+            <latex src="slaf058_eqn027.gif">
+                <?TeX \begin{eqnarray*}
+\widetilde {\mathbfss{R}}^{\rm PCA} = \mathbfss{I}-\sum _m\mathcal {F}\, \bm {v}_m\, \bm {v}_m^\dagger \, \mathcal {F}^{-1} = \mathbfss{I}-N\sum _m \tilde{\bm {v}}_m\, \tilde{\bm {v}}^\dagger _m,  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where we use the fact that the Fourier transform of
+            <latex src="slaf058_ieqn109.gif" id="tex109">
+                <?TeX $\mathbfss{I}$?>
+            </latex> is itself and
+            <latex src="slaf058_ieqn110.gif" id="tex110">
+                <?TeX $\mathcal {F}^{-1} = N \mathcal {F}^{\dagger }$?>
+            </latex>. Using equation  (
+            <link rid="equ23" id="link_d3e122645" class="eqncit" sn="23">23</link>), the TF in cross-power can then be calculated as
+        </p>
+        <eqn id="equ28" sn="28">
+            <number>28</number>
+            <latex src="slaf058_eqn028.gif">
+                <?TeX \begin{eqnarray*}
+\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \sigma } = \bigg |\widetilde {\mathbfss{R}}^{\rm PCA}_{\alpha \alpha }\bigg |_{\rm Re} = 1- N\sum _m\big |(\tilde{\bm {v}}_m)_\alpha \big |^2.  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="i">Before we proceed to calculate
+            <latex src="slaf058_ieqn111.gif" id="tex111">
+                <?TeX $\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}$?>
+            </latex>, we comment on the physical meaning of equation  (
+            <link rid="equ28" id="link_d3e124346" class="eqncit" sn="28">28</link>). The eigenvectors of a matrix, as well as their Fourier transforms, are unitary and orthogonal, so that
+        </p>
+        <eqn id="equ29" sn="29">
+            <number>29</number>
+            <latex src="slaf058_eqn029.gif">
+                <?TeX \begin{eqnarray*}
+\forall \, [m_1,m_2],\ \bm {v}^{\rm T}_{m_1}\, \bm {v}_{m_2} = \delta ^{\rm K}_{m_1m_2},\, \tilde{\bm {v}}^{\dagger }_{m_1}\, \tilde{\bm {v}}_{m_2} = \frac{\delta ^{\rm K}_{m_1m_2}}{N},  
+\end{eqnarray*}
+?>
+            </latex>
+        </eqn>
+        <p t="cont">where the extra factor of
+            <latex src="slaf058_ieqn112.gif" id="tex112">
+                <?TeX $1/N$?>
+            </latex> in the Fourier transform is due to the Fourier convention. Using the orthogonality and unitarity of the eigenvectors, we can see that for any
+            <latex src="slaf058_ieqn113.gif" id="tex113">
+                <?TeX $\bm {k}$?>
+            </latex>-mode
+            <latex src="slaf058_ieqn114.gif" id="tex114">
+                <?TeX $\bm {k}_\alpha$?>
+            </latex>,
+        </p>
+        <eqn id="equ30" sn="30">
+            <number>30</number>
+            <latex src="slaf058_eqn030.gif">
+                <?TeX \begin{eqnarray*}
+0
+                <\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \sigma } = 1- N\sum _m\big |(\tilde{\bm {v}}_m)_\alpha \big |^2 < 1.  
+\end{eqnarray*}
+?>
+                </latex>
+            </eqn>
+            <p t="cont">Therefore, the signal loss of PCA originates from the fact that, in the power spectrum estimation, a fraction of the power spectrum amplitude is projected out by the estimator. The level of signal loss is determined by the length of the eigenvectors in Fourier space at
+                <latex src="slaf058_ieqn115.gif" id="tex115">
+                    <?TeX $\bm {k}_\alpha$?>
+                </latex>. For example, for the foreground dominated modes, we expect a smooth eigenvector
+                <latex src="slaf058_ieqn116.gif" id="tex116">
+                    <?TeX $\bm {v}$?>
+                </latex>, which corresponds to a Fourier vector that has a peak at small
+                <latex src="slaf058_ieqn117.gif" id="tex117">
+                    <?TeX $k_\parallel$?>
+                </latex>. As a result, the signal loss is most severe at the
+                <latex src="slaf058_ieqn118.gif" id="tex118">
+                    <?TeX $\bm {k}$?>
+                </latex>-modes corresponding to large physical scales along the line-of-sight.
+            </p>
+            <p t="i">Furthermore, one can see that </p>
+            <eqn id="equ31" sn="31">
+                <number>31</number>
+                <latex src="slaf058_eqn031.gif">
+                    <?TeX \begin{eqnarray*}
+ \widetilde {\mathbfss{R}}^{\rm PCA} \big (\widetilde {\mathbfss{R}}^{\rm PCA}\big)^\dagger &=& \Big (\mathbfss{I} -2 N\sum _{m} \tilde{\bm {v}}_{m}\, \tilde{\bm {v}}^\dagger _{m} + N^2 \sum _{m_1,m_2} \tilde{\bm {v}}_{m_1}\, \tilde{\bm {v}}^\dagger _{m_1}\tilde{\bm {v}}_{m_2}\, \tilde{\bm {v}}^\dagger _{m_2} \Big)\nonumber\\
+&=& \, \mathbfss{I}-N\sum _{m} \tilde{\bm {v}}_{m}\, \tilde{\bm {v}}^\dagger _{m} = \widetilde {\mathbfss{R}}^{\rm PCA},   
+\end{eqnarray*}
+?>
+                </latex>
+            </eqn>
+            <p t="cont">where we utilize the orthogonality in equation  (
+                <link rid="equ29" id="link_d3e130847" class="eqncit" sn="29">29</link>). Combining equation  (
+                <link rid="equ31" id="link_d3e131148" class="eqncit" sn="31">31</link>) and equation  (
+                <link rid="equ23" id="link_d3e131449" class="eqncit" sn="23">23</link>), we can calculate the auto TF to be
+            </p>
+            <eqn id="equ32" sn="32">
+                <number>32</number>
+                <latex src="slaf058_eqn032.gif">
+                    <?TeX \begin{eqnarray*}
+ \sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}_{\alpha \sigma } &=& \bigg |\Big (\widetilde {\mathbfss{R}}^{\rm PCA} \big (\widetilde {\mathbfss{R}}^{\rm PCA}\big)^\dagger \Big)_{\alpha \alpha } \bigg |_{\rm Re} = \bigg |\Big (\widetilde {\mathbfss{R}}^{\rm PCA} \Big)_{\alpha \alpha } \bigg |_{\rm Re}\nonumber\\
+&=& \sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \sigma } .   
+\end{eqnarray*}
+?>
+                </latex>
+            </eqn>
+            <p t="i">The corresponding normalization is therefore </p>
+            <eqn id="equ33" sn="33">
+                <number>33</number>
+                <latex src="slaf058_eqn033.gif">
+                    <?TeX \begin{eqnarray*}
+\mathbfss{M}^{\rm \textrm {H\textsc {i}}}_{\alpha \beta } = \Big (\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}_{\alpha \sigma }\Big)^{-1} \delta ^{\rm K}_{\alpha \beta } \approx \mathcal {T}(\bm {k}_\alpha)^{-1} \delta ^{\rm K}_{\alpha \beta }.  
+\end{eqnarray*}
+?>
+                </latex>
+            </eqn>
+            <p t="i">Equation  (
+                <link rid="equ32" id="link_d3e133550" class="eqncit" sn="32">32</link>) shows that, regardless of the numerical details of the PCA, the attenuation of the H
+                <sc>i</sc> autopower spectrum amplitude is the same as the attenuation in the H
+                <sc>i</sc>-galaxy cross-power, which can both be approximated by the TF,
+                <latex src="slaf058_ieqn119.gif" id="tex119">
+                    <?TeX $\mathcal {T}$?>
+                </latex>. As a result, in both auto and cross, the required signal loss correction is
+                <latex src="slaf058_ieqn120.gif" id="tex120">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex>. From the derivation of equation  (
+                <link rid="equ32" id="link_d3e135551" class="eqncit" sn="32">32</link>), one can see that the
+                <latex src="slaf058_ieqn121.gif" id="tex121">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> correction stems from the fact that the eigenvectors are orthogonal to each other. The derivations provide a formal proof to the phenomenon seen in the simulations in
+                <link rid="bib8" id="link_d3e136352" class="bibcit" sn="8">C23</link> and the discussions in Appendix B3 of
+                <link rid="bib11" id="link_d3e136653" class="bibcit" sn="11">MK25</link>.
+            </p>
+            <p t="i">The derivation also provides insights into the internal cross-correlation where both data sets are H
+                <sc>i</sc> signals but possess different foregrounds. The
+                <latex src="slaf058_ieqn122.gif" id="tex122">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> correction derived in this work for autopower is specific to the quadratic estimator, with
+                <latex src="slaf058_ieqn123.gif" id="tex123">
+                    <?TeX $\mathbfss{R}_1 = \mathbfss{R}_2 = \mathbfss{R}^{\rm PCA}$?>
+                </latex>. For two data sets with different PCA cleaning, the orthogonality no longer holds, and therefore the signal loss correction is no longer
+                <latex src="slaf058_ieqn124.gif" id="tex124">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex>. The quadratic estimator formalism, on the other hand, is universal. For any given
+                <latex src="slaf058_ieqn125.gif" id="tex125">
+                    <?TeX $\mathbfss{R}_1$?>
+                </latex> and
+                <latex src="slaf058_ieqn126.gif" id="tex126">
+                    <?TeX $\mathbfss{R}_2$?>
+                </latex>, the window function can be calculated exactly using equation (
+                <link rid="equ19" id="link_d3e140154" class="eqncit" sn="19">19</link>) (see e.g. Kern &amp; Liu
+                <link rid="bib9" id="link_d3e140455" class="bibcit" sn="9">2021</link> for the case of using Gaussian Process Regression). It can also be used to mitigate the systematics in the data (see e.g. Williams et al.
+                <link rid="bib22" id="link_d3e140756" class="bibcit" sn="22">2021</link>; Wang et al.
+                <link rid="bib20" id="link_d3e141057" class="bibcit" sn="20">2022</link>,
+                <link rid="bib21" id="link_d3e141358" class="bibcit" sn="21">2024</link>).
+            </p>
+            <p t="i">We note an important fact that, while the TF corrects the amplitude by normalizing over
+                <latex src="slaf058_ieqn127.gif" id="tex127">
+                    <?TeX $\sum _\sigma \mathbfss{H}_{\alpha \sigma }$?>
+                </latex>, it does not account for the mode-mixing in the window function of the autopower. If there is severe contamination that requires aggressive cleaning, the TF correction may not be robust as the window function mixes a wide range of scales at small
+                <latex src="slaf058_ieqn128.gif" id="tex128">
+                    <?TeX $|\bm {k}|$?>
+                </latex>. The mode-mixing also affects the calculation of covariance, which will be important for model inference in future data analysis.
+            </p>
+            <h1 id="sec3">
+                <number>3</number>
+                <ti>NUMERICAL VALIDATION</ti>
+            </h1>
+            <p t="fl">In this section, we verify the analytical derivations in Section
+                <link rid="sec2" id="link_d3e143559" class="seccit">2</link> with numerical simulations, and use the simulations to demonstrate the effects of TF on the power spectrum estimation. For simplicity, we neglect all observational effects and simply generate H
+                <sc>i</sc> temperature fields in comoving boxes to isolate the effects of PCA. The box dimensions and H
+                <sc>i</sc> model parameters are listed in Table
+                <link rid="tbl1" id="link_d3e144460" class="tbcit" sn="1">1</link>, which corresponds to the survey volume of
+                <link rid="bib11" id="link_d3e144761" class="bibcit" sn="11">MK25</link>. Using the model H
+                <sc>i</sc> power spectrum, we generate Gaussian realizations of the H
+                <sc>i</sc> density field. A synchrotron emission cube is also generated using the Global Sky Model (Zheng et al.
+                <link rid="bib25" id="link_d3e145762" class="bibcit" sn="25">2017</link>) under the flat-sky approximation. The density field combining the H
+                <sc>i</sc> and the synchrotron radiation is then used for PCA cleaning. We chose
+                <latex src="slaf058_ieqn129.gif" id="tex129">
+                    <?TeX $N_{\rm fg} = 40$?>
+                </latex>, which leads to extreme signal loss and mode-mixing at large scales, to demonstrate the window function
+                <latex src="slaf058_ieqn130.gif" id="tex130">
+                    <?TeX $\mathbfss{H}$?>
+                </latex> induced by the cleaning. For comparison, the MeerKLASS 2019
+                <i>L</i>-band data requires
+                <latex src="slaf058_ieqn131.gif" id="tex131">
+                    <?TeX $N_{\rm fg} = 4$?>
+                </latex> on large scales (Carucci et al.
+                <link rid="bib4" id="link_d3e147963" class="bibcit" sn="4">2024</link>), and the 2021 data described in
+                <link rid="bib11" id="link_d3e148264" class="bibcit" sn="11">MK25</link> requires
+                <latex src="slaf058_ieqn132.gif" id="tex132">
+                    <?TeX $N_{\rm fg} = 10$?>
+                </latex>. Note that, in the flat sky approximation, the PCA cleaning is only operating on the data vector along the
+                <latex src="slaf058_ieqn133.gif" id="tex133">
+                    <?TeX $z$?>
+                </latex>-axis, and thus the window function is only non-trivial along the
+                <latex src="slaf058_ieqn134.gif" id="tex134">
+                    <?TeX $k_\parallel$?>
+                </latex> direction.
+            </p>
+            <table id="tbl1" sn="1" frame="topbot" orient="port" width="auto">
+                <number>Table 1.</number>
+                <ti>
+                    <?tsp type="att-pgwide" data="2" skip="true" objectname="ObjectProperty"?>The specifications for the H
+                    <sc>i</sc> simulations.
+                    <latex src="slaf058_ieqn135.gif" id="tex135">
+                        <?TeX $L_{x,y,z}$?>
+                    </latex> are the lengths of the box in each dimension,
+                    <latex src="slaf058_ieqn136.gif" id="tex136">
+                        <?TeX $N_{x,y,z}$?>
+                    </latex> are the numbers of grids in each dimension,
+                    <latex src="slaf058_ieqn137.gif" id="tex137">
+                        <?TeX $z$?>
+                    </latex> is the redshift,
+                    <latex src="slaf058_ieqn138.gif" id="tex138">
+                        <?TeX $\Omega _{\textrm {H\textsc {i}}}$?>
+                    </latex> is the H
+                    <sc>i</sc> density relative to the critical density of the present day, and
+                    <latex src="slaf058_ieqn139.gif" id="tex139">
+                        <?TeX $b_{\textrm {H\textsc {i}}}$?>
+                    </latex> is the H
+                    <sc>i</sc> bias. The specifications are chosen to match the survey in
+                    <link rid="bib11" id="link_d3e154265" class="bibcit" sn="11">MK25</link>. We also assume the cosmology reported in Planck Collaboration VI (
+                    <link rid="bib12" id="link_d3e154566" class="bibcit" sn="12">2020</link>).
+                </ti>
+                <tgroup cols="5">
+                    <colspec colname="col1" align="left" colwidth="55pt" />
+                    <colspec colname="col2" align="center" colwidth="50pt" />
+                    <colspec colname="col3" align="center" colwidth="20pt" />
+                    <colspec colname="col4" align="center" colwidth="55pt" />
+                    <colspec colname="col5" align="center" colwidth="20pt" />
+                    <thead>
+                        <row>
+                            <entry colname="col1" align="left">
+                                <p>
+                                    <latex src="slaf058_ieqn140.gif" id="tex140">
+                                        <?TeX $L_{x,y,z}\,$?>
+                                    </latex>(Mpc)
+                                </p>
+                            </entry>
+                            <entry colname="col2" align="center">
+                                <p>
+                                    <latex src="slaf058_ieqn141.gif" id="tex141">
+                                        <?TeX $N_{x,y,z}$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                            <entry colname="col3" align="center">
+                                <p>
+                                    <latex src="slaf058_ieqn142.gif" id="tex142">
+                                        <?TeX $z$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                            <entry colname="col4" align="center">
+                                <p>
+                                    <latex src="slaf058_ieqn143.gif" id="tex143">
+                                        <?TeX $\Omega _{\textrm {H\textsc {i}}}$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                            <entry colname="col5" align="center">
+                                <p>
+                                    <latex src="slaf058_ieqn144.gif" id="tex144">
+                                        <?TeX $b_{\textrm {H\textsc {i}}}$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry colname="col1">
+                                <p>
+                                    <latex src="slaf058_ieqn145.gif" id="tex145">
+                                        <?TeX $[636,\, 424,\, 263]$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                            <entry colname="col2">
+                                <p>[72, 48, 252]</p>
+                            </entry>
+                            <entry colname="col3">
+                                <p>0.42</p>
+                            </entry>
+                            <entry colname="col4">
+                                <p>
+                                    <latex src="slaf058_ieqn146.gif" id="tex146">
+                                        <?TeX $0.5\times 10^{-3}$?>
+                                    </latex>
+                                </p>
+                            </entry>
+                            <entry colname="col5">
+                                <p>1.5</p>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <p t="i">The resulting 3D power spectrum is then averaged into cylindrical and 1D
+                <latex src="slaf058_ieqn147.gif" id="tex147">
+                    <?TeX $\bm {k}$?>
+                </latex>-space for visualization. For the cylindrical power spectrum, we choose the
+                <latex src="slaf058_ieqn148.gif" id="tex148">
+                    <?TeX $|\bm {k}_\perp |$?>
+                </latex> bins to be linearly spaced between [0, 0.5]
+                <latex src="slaf058_ieqn149.gif" id="tex149">
+                    <?TeX $\, \rm Mpc^{-1}$?>
+                </latex> with 10 bins, and the
+                <latex src="slaf058_ieqn150.gif" id="tex150">
+                    <?TeX $|k_\parallel |$?>
+                </latex> bins to be linearly spaced between [0, 3.0]
+                <latex src="slaf058_ieqn151.gif" id="tex151">
+                    <?TeX $\, \rm Mpc^{-1}$?>
+                </latex> with 15 bins. For the 1D power spectrum, we choose the
+                <latex src="slaf058_ieqn152.gif" id="tex152">
+                    <?TeX $|\bm {k}|$?>
+                </latex> bins to be logarithmically spaced between [0.005, 3.0]
+                <latex src="slaf058_ieqn153.gif" id="tex153">
+                    <?TeX $\, \rm Mpc^{-1}$?>
+                </latex> with 10 bins. The simulations are repeated with 100 independent realizations of the H
+                <sc>i</sc> signal and averaged over the realizations for demonstration.
+            </p>
+            <p t="i">We first verify equation  (
+                <link rid="equ32" id="link_d3e164467" class="eqncit" sn="32">32</link>) by numerically calculating
+                <latex src="slaf058_ieqn154.gif" id="tex154">
+                    <?TeX $\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}_{\alpha \sigma }$?>
+                </latex> and
+                <latex src="slaf058_ieqn155.gif" id="tex155">
+                    <?TeX $\sum _{\sigma }\mathbfss{H}^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}_{\alpha \sigma }$?>
+                </latex> to show that they are equal to each other. The results are shown in Fig.
+                <link rid="fig1" id="link_d3e165768" class="figcit" sn="1">1</link>. As expected, the signal loss, quantified by the TF, is severe at small
+                <latex src="slaf058_ieqn156.gif" id="tex156">
+                    <?TeX $|k_\parallel |$?>
+                </latex>, due to the foregrounds being smooth. In the extreme setting of removing
+                <latex src="slaf058_ieqn157.gif" id="tex157">
+                    <?TeX $N_{\rm fg} = 40$?>
+                </latex> modes, the signal loss becomes significant at
+                <latex src="slaf058_ieqn158.gif" id="tex158">
+                    <?TeX $|k_\parallel |\lesssim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex>. The TFs are identical for auto and cross-power, with the numerical differences
+                <latex src="slaf058_ieqn159.gif" id="tex159">
+                    <?TeX $< 10^{-15}$?>
+                </latex>. The results again verify the fact that the TF correction in autopower is
+                <latex src="slaf058_ieqn160.gif" id="tex160">
+                    <?TeX $\mathcal {T}^{-1}$?>
+                </latex>, not
+                <latex src="slaf058_ieqn161.gif" id="tex161">
+                    <?TeX $\mathcal {T}^{-2}$?>
+                </latex>.
+            </p>
+            <fig id="fig1" sn="1">
+                <number>Figure 1.</number>
+                <ti>The upper panel shows the transfer function based on the window function normalization,
+                    <latex src="slaf058_ieqn162.gif" id="tex162">
+                        <?TeX $\sum _{\sigma } \mathbfss{H}_{\alpha \sigma }$?>
+                    </latex>, for the H
+                    <sc>i</sc> autopower spectrum (
+                    <latex src="slaf058_ieqn163.gif" id="tex163">
+                        <?TeX $\sum _{\sigma } \mathbfss{H}_{\alpha \sigma }^{\mathbfss{R}^{\rm PCA},\mathbfss{R}^{\rm PCA}}$?>
+                    </latex>) and H
+                    <sc>i</sc>-galaxy cross-power spectrum (
+                    <latex src="slaf058_ieqn164.gif" id="tex164">
+                        <?TeX $\sum _{\sigma } \mathbfss{H}_{\alpha \sigma }^{\mathbfss{R}^{\rm PCA},\mathbfss{I}}$?>
+                    </latex>). The lower panel shows the
+                    <latex src="slaf058_ieqn165.gif" id="tex165">
+                        <?TeX $\lesssim 10^{-15}$?>
+                    </latex> differences between the transfer functions for auto and cross-power, which are numerical precision artefacts. For illustration, the signal loss is chosen to be extreme, with
+                    <latex src="slaf058_ieqn166.gif" id="tex166">
+                        <?TeX $N_{\rm fg} = 40$?>
+                    </latex>, and does not represent a realistic case in data analysis.
+                    <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_6">
+                        <queryText type="query">Figures have been edited to conform to journal style. Please check all figures carefully. If any adjustments are needed, where possible please note these as instructions to the typesetter rather than providing a replacement figure</queryText>
+                    </query>
+                </ti>
+                <img src="slaf058_f1.jpg" />
+            </fig>
+            <p t="i">We then verify that the H
+                <sc>i</sc> power spectrum after PCA cleaning indeed follows the window function
+                <latex src="slaf058_ieqn167.gif" id="tex167">
+                    <?TeX $\mathbfss{H}$?>
+                </latex>. For comparison, we calculate the 3D power spectrum of the PCA-cleaned H
+                <sc>i</sc> field,
+                <latex src="slaf058_ieqn168.gif" id="tex168">
+                    <?TeX $\hat{p}^{\rm HI}_{\alpha }$?>
+                </latex>, and average it into cylindrical
+                <latex src="slaf058_ieqn169.gif" id="tex169">
+                    <?TeX $\bm {k}$?>
+                </latex>-space. The PCA cleaning gives the cleaning matrix
+                <latex src="slaf058_ieqn170.gif" id="tex170">
+                    <?TeX $\mathbfss{R}^{\rm PCA}$?>
+                </latex>, which is used to calculate the window function
+                <latex src="slaf058_ieqn171.gif" id="tex171">
+                    <?TeX $\mathbfss{H}$?>
+                </latex>. We then apply the window function to the input model spectrum,
+                <latex src="slaf058_ieqn172.gif" id="tex172">
+                    <?TeX $\sum _{\beta }\mathbfss{H}_{\alpha \beta }\, {p}^{\rm model}_{\beta }$?>
+                </latex>, which is then averaged into the cylindrical
+                <latex src="slaf058_ieqn173.gif" id="tex173">
+                    <?TeX $\bm {k}$?>
+                </latex>-space as well for comparison. The results are shown in the left half of Fig.
+                <link rid="fig2" id="link_d3e177569" class="figcit" sn="2">2</link>. As seen, the output H
+                <sc>i</sc> power spectrum, after cleaning, suffers severe signal loss at
+                <latex src="slaf058_ieqn174.gif" id="tex174">
+                    <?TeX $k_\parallel \lesssim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex>, consistent with the TF corrections shown in Fig.
+                <link rid="fig1" id="link_d3e178770" class="figcit" sn="1">1</link>. Moreover, the model power spectrum, after applying the window function, is almost identical with the output H
+                <sc>i</sc> power spectrum, with the differences
+                <latex src="slaf058_ieqn175.gif" id="tex175">
+                    <?TeX $\lesssim 10~{{\ \rm per\ cent}}$?>
+                </latex> even with extreme
+                <latex src="slaf058_ieqn176.gif" id="tex176">
+                    <?TeX $\sim 10^{-3}$?>
+                </latex> signal loss leading to large numerical uncertainties. It validates the window function expression described in equation  (
+                <link rid="equ19" id="link_d3e180371" class="eqncit" sn="19">19</link>).
+            </p>
+            <fig id="fig2" sn="2">
+                <number>Figure 2.</number>
+                <ti>The left half of the panels show the output H
+                    <sc>i</sc> power spectrum from simulations after PCA cleaning (‘
+                    <latex src="slaf058_ieqn177.gif" id="tex177">
+                        <?TeX $\hat{p}^{\rm HI}_{\alpha }$?>
+                    </latex>’), the input model H
+                    <sc>i</sc> power spectrum with window function
+                    <latex src="slaf058_ieqn178.gif" id="tex178">
+                        <?TeX $\mathbfss{H}$?>
+                    </latex> applied (‘
+                    <latex src="slaf058_ieqn179.gif" id="tex179">
+                        <?TeX $\sum _{\beta }\mathbfss{H}_{\alpha \beta }\, {p}^{\rm model}_{\beta }$?>
+                    </latex>’), and the fractional differences between the former and the latter (‘
+                    <latex src="slaf058_ieqn180.gif" id="tex180">
+                        <?TeX $\Delta P/P$?>
+                    </latex>’). The right half of the panels show the output H
+                    <sc>i</sc> power spectrum after PCA cleaning with TF corrections applied (‘
+                    <latex src="slaf058_ieqn181.gif" id="tex181">
+                        <?TeX $\mathcal {T}(k_\alpha)^{-1}\, \hat{p}^{\rm HI}_{\alpha }$?>
+                    </latex>’), the input H
+                    <sc>i</sc> power spectrum (‘
+                    <latex src="slaf058_ieqn182.gif" id="tex182">
+                        <?TeX ${p}^{\rm model}_{\alpha }$?>
+                    </latex>’), and the fractional differences between the two (‘
+                    <latex src="slaf058_ieqn183.gif" id="tex183">
+                        <?TeX $\Delta P/P$?>
+                    </latex>’). All power spectra are in the unit of
+                    <latex src="slaf058_ieqn184.gif" id="tex184">
+                        <?TeX $\rm mK^2\, Mpc^3$?>
+                    </latex>. In the fractional differences, values below −0.1 are set to −0.1 for visualization. For illustration, the signal loss is chosen to be extreme, with
+                    <latex src="slaf058_ieqn185.gif" id="tex185">
+                        <?TeX $N_{\rm fg} = 40$?>
+                    </latex>, and does not represent a realistic case in data analysis.
+                    <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_7">
+                        <queryText type="query">Please check the figures in the PDF proof carefully.</queryText>
+                    </query>
+                    <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_8">
+                        <queryText type="query">Please check if your article contains a video/animation file (MP4). If yes, a still image of the file will be included on the PDF proof. The actual video file will be included in the HTML version of the article, upon final publication online. If changes are required to the submitted video file, please upload new files as part of your article corrections.</queryText>
+                    </query>
+                </ti>
+                <img src="slaf058_f2.jpg" width="750" height="auto" />
+            </fig>
+            <p t="i">With our extreme setting of removing
+                <latex src="slaf058_ieqn186.gif" id="tex186">
+                    <?TeX $N_{\rm fg}=40$?>
+                </latex> modes, we can explore the limitation of the TF correction which we show in the right half of Fig.
+                <link rid="fig2" id="link_d3e188172" class="figcit" sn="2">2</link>. The TF correction,
+                <latex src="slaf058_ieqn187.gif" id="tex187">
+                    <?TeX $\mathcal {T}^{-1}$?>
+                </latex>, is applied to the output H
+                <sc>i</sc> power spectrum and compared against the input model power spectrum. At
+                <latex src="slaf058_ieqn188.gif" id="tex188">
+                    <?TeX $k_\parallel \lesssim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex> where signal loss is severe, the correction does not match the input model. This is because, while the TF ensures that the final window function obeys
+                <latex src="slaf058_ieqn189.gif" id="tex189">
+                    <?TeX $\sum _\sigma \mathbfss{W}_{\alpha \sigma } = 1$?>
+                </latex>, the measured power at small
+                <latex src="slaf058_ieqn190.gif" id="tex190">
+                    <?TeX $k_\parallel$?>
+                </latex> is a mixture of different
+                <latex src="slaf058_ieqn191.gif" id="tex191">
+                    <?TeX $k_\parallel$?>
+                </latex> scales, with large
+                <latex src="slaf058_ieqn192.gif" id="tex192">
+                    <?TeX $k_\parallel$?>
+                </latex> modes having much smaller amplitude.
+            </p>
+            <p t="i">The mode-mixing is visualized in Fig.
+                <link rid="fig3" id="link_d3e192073" class="figcit" sn="3">3</link>, where the normalized window function
+                <latex src="slaf058_ieqn193.gif" id="tex193">
+                    <?TeX $\mathbfss{W}$?>
+                </latex> is shown. Corresponding to the signal loss, there is severe mode-mixing at
+                <latex src="slaf058_ieqn194.gif" id="tex194">
+                    <?TeX $k_\parallel \lesssim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex>. Measurements at these scales contain a large contribution from
+                <latex src="slaf058_ieqn195.gif" id="tex195">
+                    <?TeX $k_\parallel \gtrsim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex> modes, which have smaller power spectrum amplitude. As a result, even though the correct TF correction is applied, the corrected power spectrum does not match the input. In current data analysis, the signal loss is far less severe compared to the case in this work, and the region of
+                <latex src="slaf058_ieqn196.gif" id="tex196">
+                    <?TeX $\bm {k}-$?>
+                </latex>space with significant mode-mixing is much smaller than the
+                <latex src="slaf058_ieqn197.gif" id="tex197">
+                    <?TeX $k_\parallel \lesssim 0.5\, {\rm Mpc^{-1}}$?>
+                </latex> shown here. However, failure to consider the mode-mixing will still lead to biased estimation of the power spectrum and its covariance. To further illustrate this, we compute the 1D power spectrum and the 1D window function in Fig.
+                <link rid="fig4" id="link_d3e194974" class="figcit" sn="4">4</link>. The input power spectrum with window function applied (‘
+                <latex src="slaf058_ieqn198.gif" id="tex198">
+                    <?TeX $\sum _{\beta }\mathbfss{H}_{\alpha \beta }\, {p}^{\rm model}_{\beta }$?>
+                </latex>’) agrees well with the output (‘
+                <latex src="slaf058_ieqn199.gif" id="tex199">
+                    <?TeX $\hat{p}^{\rm HI}_{\alpha }$?>
+                </latex>’). Meanwhile, the transfer function corrected output power (‘
+                <latex src="slaf058_ieqn200.gif" id="tex200">
+                    <?TeX $\mathcal {T}(k_\alpha)^{-1}\, \hat{p}^{\rm HI}_{\alpha }$?>
+                </latex>’) deviates significantly from the input (‘
+                <latex src="slaf058_ieqn201.gif" id="tex201">
+                    <?TeX ${p}^{\rm model}_{\alpha }$?>
+                </latex>’), and is almost constant at
+                <latex src="slaf058_ieqn202.gif" id="tex202">
+                    <?TeX $|\bm {k}|\lesssim 0.5\, {\rm Mpc}^{-1}$?>
+                </latex>. As seen in the lower panel, the measurement at small
+                <latex src="slaf058_ieqn203.gif" id="tex203">
+                    <?TeX $|\bm {k}|$?>
+                </latex> contains a mixture of all scales and very little information from the desired
+                <latex src="slaf058_ieqn204.gif" id="tex204">
+                    <?TeX $|\bm {k}|$?>
+                </latex> bin, leading to the constant power in
+                <latex src="slaf058_ieqn205.gif" id="tex205">
+                    <?TeX $\mathcal {T}(k_\alpha)^{-1}\, \hat{p}^{\rm HI}_{\alpha }$?>
+                </latex>. While mode-mixing is not severe at large
+                <latex src="slaf058_ieqn206.gif" id="tex206">
+                    <?TeX $|\bm {k}|$?>
+                </latex>, it can be seen that the measurement contains a mixture of small
+                <latex src="slaf058_ieqn207.gif" id="tex207">
+                    <?TeX $|\bm {k}|$?>
+                </latex>. The biasing has also been seen in the data as described in section 7 of Carucci et al. (
+                <link rid="bib4" id="link_d3e200475" class="bibcit" sn="4">2024</link>). In the future, where the H
+                <sc>i</sc> power spectrum is detected at scales larger than the Baryon Acoustic Oscillations, the biases will have a significant impact on cosmological inference.
+            </p>
+            <fig id="fig3" sn="3">
+                <number>Figure 3.</number>
+                <ti>The normalized window function
+                    <latex src="slaf058_ieqn208.gif" id="tex208">
+                        <?TeX $\mathbfss{W} = \mathbfss{M}\, \mathbfss{H}$?>
+                    </latex> described in equation (
+                    <link rid="equ18" id="link_d3e202276" class="eqncit" sn="18">18</link>), with the normalization matrix
+                    <latex src="slaf058_ieqn209.gif" id="tex209">
+                        <?TeX $\mathbfss{M}$?>
+                    </latex> following equation  (
+                    <link rid="equ22" id="link_d3e203077" class="eqncit" sn="22">22</link>). Values below
+                    <latex src="slaf058_ieqn210.gif" id="tex210">
+                        <?TeX $10^{-3}$?>
+                    </latex> are set to
+                    <latex src="slaf058_ieqn211.gif" id="tex211">
+                        <?TeX $10^{-3}$?>
+                    </latex> for visualization. The
+                    <latex src="slaf058_ieqn212.gif" id="tex212">
+                        <?TeX $k_\parallel >1\, {\rm Mpc^{-1}}$?>
+                    </latex> range is omitted to highlight the mode-mixing at large scales. For illustration, the signal loss is chosen to be extreme, with
+                    <latex src="slaf058_ieqn213.gif" id="tex213">
+                        <?TeX $N_{\rm fg} = 40$?>
+                    </latex>, and does not represent a realistic case in data analysis.
+                </ti>
+                <img src="slaf058_f3.jpg" />
+            </fig>
+            <fig id="fig4" sn="4">
+                <number>Figure 4.</number>
+                <ti>Upper panel: The 1D average of the power spectra (see the caption of Fig.
+                    <link rid="fig2" id="link_d3e206178" class="figcit" sn="2">2</link>). The error bar corresponds to the standard deviation among the realizations. Lower panel: The normalized 1D window function for the first and the last
+                    <latex src="slaf058_ieqn214.gif" id="tex214">
+                        <?TeX $|\bm {k}|$?>
+                    </latex> bin.
+                </ti>
+                <img src="slaf058_f4.jpg" />
+            </fig>
+            <p t="i">We note that, the numerical TF correction studied in
+                <link rid="bib8" id="link_d3e207279" class="bibcit" sn="8">C23</link> is not exactly equivalent to the TF correction shown in this section. In data analysis, the H
+                <sc>i</sc> signal is obtained as sky maps and gridded onto rectangular grids. The effects of PCA cleaning are then no longer only along the
+                <latex src="slaf058_ieqn215.gif" id="tex215">
+                    <?TeX $k_\parallel$?>
+                </latex>-axis. The corresponding
+                <latex src="slaf058_ieqn216.gif" id="tex216">
+                    <?TeX $\mathbfss{R}^{\rm PCA}$?>
+                </latex> and window function
+                <latex src="slaf058_ieqn217.gif" id="tex217">
+                    <?TeX $\mathbfss{H}$?>
+                </latex> are much larger in their dimensions and harder to compute numerically. The TF calculation based on mock injection provides an efficient way of estimating the window function amplitude. On the other hand, since PCA cleaning is not the last operation in the overall
+                <latex src="slaf058_ieqn218.gif" id="tex218">
+                    <?TeX $\mathbfss{R}$?>
+                </latex>, the operations of weighting and gridding may further complicate the window function and break the assumption in equation  (
+                <link rid="equ24" id="link_d3e209980" class="eqncit" sn="24">24</link>). Further development is needed to apply the formalism shown here to the data analysis, which we leave for future work.
+            </p>
+            <p t="i">Finally, we emphasize that the quadratic estimator formalism in this work provides insights into improving the TF correction. The approximation in equation  (
+                <link rid="equ24" id="link_d3e210481" class="eqncit" sn="24">24</link>) can be dropped if we redefine the TF correction to be
+            </p>
+            <eqn id="equ34" sn="34">
+                <number>34</number>
+                <latex src="slaf058_eqn034.gif">
+                    <?TeX \begin{eqnarray*}
+\mathcal {T}^{\prime }(\bm {k}_\alpha) = \frac{\big \langle \mathcal {P}[m^{\prime }_{\rm clean},m_{\rm g/\textrm {H\textsc {i}}}]\big \rangle }{\big \langle \mathcal {P}[m_{\rm \textrm {H\textsc {i}}},m_{\rm g/\textrm {H\textsc {i}}}]\big \rangle } = \mathcal {T}_{\rm true}(\bm {k}_\alpha),  
+\end{eqnarray*}
+?>
+                </latex>
+            </eqn>
+            <p t="cont">where
+                <latex src="slaf058_ieqn219.gif" id="tex219">
+                    <?TeX $m^{\prime }_{\rm clean}$?>
+                </latex> is the mock H
+                <sc>i</sc> signal cleaned by the PCA matrix obtained from the data without the injection. The alternative TF correction is, in fact, studied in the upper panel of fig. C1 of
+                <link rid="bib8" id="link_d3e212382" class="bibcit" sn="8">C23</link> and found to be underestimating the H
+                <sc>i</sc> power. The results shown in this work demonstrate that this underestimation is due to the mode-mixing. In other words, the default TF correction in
+                <link rid="bib8" id="link_d3e213083" class="bibcit" sn="8">C23</link> treats the mode-mixing
+                <i>as if it were part of the signal loss</i>. Follow-up work should instead use the alternative TF correction which is completely model independent, and expand the TF formalism to account for the mode-mixing separately.
+            </p>
+            <h1 id="sec4" type="conclusion">
+                <number>4</number>
+                <ti>CONCLUSION</ti>
+            </h1>
+            <p t="fl">In this Letter, we have shown that the transfer function correction in H
+                <sc>i</sc> intensity mapping experiments can be understood through the quadratic estimator formalism. The TF correction is effectively a normalization of the power spectrum estimator, which restores the amplitude of the measured power spectrum. The true correction depends only on the foreground removal operator, and therefore the TF correction can be robust against the choice of mock signal modelling. Using the quadratic estimator formalism, we prove analytically that the TF correction should be
+                <latex src="slaf058_ieqn220.gif" id="tex220">
+                    <?TeX $\mathcal {T}(\bm {k})^{-1}$?>
+                </latex> for both auto and cross-power. The quadratic estimator formalism, with the derivations up to equation  (
+                <link rid="equ26" id="link_d3e215184" class="eqncit" sn="26">26</link>), is universal for all linear operations on the data vector and can be used for more complicated scenarios, for example for cross-correlating two H
+                <sc>i</sc> data sets.
+            </p>
+            <p t="i">The quadratic estimator formalism also shows that the TF correction ignores mode-mixing in the autopower caused by foreground removal. The formalism outlined in this work can be used to further develop the TF technique to include the mode-mixing, which will be the focus of the follow-up work. Constructing an accurate window function will be crucial for enabling cosmological inference using H
+                <sc>i</sc> intensity mapping in the era of the SKAO.
+            </p>
+            <h1 type="ack">
+                <ti>ACKNOWLEDGEMENTS</ti>
+            </h1>
+            <p t="fl">ZC thanks Alkistis Pourtsidou, Steven Cunnington, Stefano Camera, Isabella Paola Carucci, José Luis Bernal, Matilde Barberi-Squarotti for discussions, and Zheng Zhang for pointing out a way to simplify the derivation. ZC is funded by a
+                <hi exinfo="http://dx.doi.org/10.13039/100014013" type="funding-source">UKRI</hi> Future Leaders Fellowship [grant
+                <hi type="award-id">MR/X005399/1</hi>; PI: Alkistis Pourtsidou].
+                <query id="pxeoup_MNRASL_55532_284_5_11776_17" type="query" fRole="Copy Editor Aptara" fWflID="5" fID="284" tWflID="8" tRole="Author" tID="0" tName="" fName="Aravind Kumar" exinfo="ShowQuery">
+                    <queryText type="query" postedOn="07Jun25-03:28">In order to validate your funding information prior to publication, please check and confirm whether the name of the funding body given in your manuscript is complete and correct. If any edits are required please mark them on the text. Please also expand any acronyms used in this section. If multiple grants are cited, please ensure the text of your funding statement clearly indicates which grant applies to which funding body. Insert any changes to this section directly in the text.</queryText>
+                </query>
+            </p>
+            <h1 id="sec5" type="data-availability">
+                <ti>DATA AVAILABILITY</ti>
+            </h1>
+            <p t="fl">The code for generating the simulation results in this Letter can be found
+                <url type="uri" href="https://github.com/zhaotingchen/qe_tf_im/tree/main">here</url>.
+                <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_9">
+                    <queryText type="query">If your manuscript has figures or text from other sources, please ensure you have permission from the copyright holder. Also ensure that the copyright owner is properly credited, for instance in the figure legends. Make any changes directly in the text. For any questions about permissions, contact jnls.author.support@oup.com.</queryText>
+                </query>
+            </p>
+        </bdy>
+        <bm>
+            <ref type="uno" id="ref1">
+                <ti>REFERENCES</ti>
+                <bib id="bib1">
+                    <jcit>
+                        <au>
+                            <s>Anderson</s>
+                            <f>C. J.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2018</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>476</v>,
+                        <pages>3382</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/sty346" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib2">
+                    <jcit>
+                        <au>
+                            <s>Battye</s>
+                            <f>R. A.</f>
+                        </au>,
+                        <au>
+                            <s>Davies</s>
+                            <f>R. D.</f>
+                        </au>,
+                        <au>
+                            <s>Weller</s>
+                            <f>J.</f>
+                        </au>,
+                        <yr>2004</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>355</v>,
+                        <pages>1339</pages>
+                        <?tsp type="ref-doi" data="10.1111/j.1365-2966.2004.08416.x" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib3">
+                    <jcit>
+                        <au>
+                            <s>Bharadwaj</s>
+                            <f>S.</f>
+                        </au>,
+                        <au>
+                            <s>Nath</s>
+                            <f>B. B.</f>
+                        </au>,
+                        <au>
+                            <s>Sethi</s>
+                            <f>S. K.</f>
+                        </au>,
+                        <yr>2001</yr>,
+                        <pt>JA&amp;A</pt>,
+                        <v>22</v>,
+                        <pages>21</pages>
+                        <?tsp type="ref-doi" data="10.1007/BF02933588" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib4">
+                    <othcit exinfo="other">
+                        <au>
+                            <s>Carucci</s>
+                            <f>I. P.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2024</yr>,
+                        <misc1>preprint</misc1> (
+                        <arxiv>arXiv:2412.06750</arxiv>)
+                        <?tsp type="ref-doi" data="10.48550/arXiv.2412.06750" skip="true" objectname="ObjectProperty"?>
+                        <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_10">
+                            <queryText type="query" fRole="Copy Editor Aptara" fID="284" fWflID="5" postedOn="07Jun25-03:34" fName="Aravind">Please provide updated publication details for preprint reference 'Carucci et al. 2024', if available, directly in the reference.</queryText>
+                        </query>
+                    </othcit>
+                </bib>
+                <bib id="bib5">
+                    <jcit>
+                        <au>
+                            <s>Chang</s>
+                            <f>T.-C.</f>
+                        </au>,
+                        <au>
+                            <s>Pen</s>
+                            <f>U.-L.</f>
+                        </au>,
+                        <au>
+                            <s>Peterson</s>
+                            <f>J. B.</f>
+                        </au>,
+                        <au>
+                            <s>McDonald</s>
+                            <f>P.</f>
+                        </au>,
+                        <yr>2008</yr>,
+                        <pt>Phys. Rev. Lett.</pt>,
+                        <v>100</v>,
+                        <pages>091303</pages>
+                        <?tsp type="ref-doi" data="10.1103/PhysRevLett.100.091303" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib6">
+                    <othcit exinfo="other">
+                        <au>
+                            <s>Chen</s>
+                            <f>Z.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2025</yr>,
+                        <misc1>preprint</misc1> (
+                        <arxiv>arXiv:2504.03908</arxiv>)
+                        <?tsp type="ref-doi" data="10.48550/arXiv.2504.03908" skip="true" objectname="ObjectProperty"?>
+                        <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_11">
+                            <queryText type="query" fRole="Copy Editor Aptara" fID="284" fWflID="5" postedOn="07Jun25-03:33" fName="Aravind">Please provide updated publication details for preprint reference 'Chen et al. 2025', if available, directly in the reference.</queryText>
+                        </query>
+                    </othcit>
+                </bib>
+                <bib id="bib7">
+                    <jcit>
+                        <au>
+                            <s>Condon</s>
+                            <f>J. J.</f>
+                        </au>,
+                        <au>
+                            <s>Cotton</s>
+                            <f>W. D.</f>
+                        </au>,
+                        <au>
+                            <s>Greisen</s>
+                            <f>E. W.</f>
+                        </au>,
+                        <au>
+                            <s>Yin</s>
+                            <f>Q. F.</f>
+                        </au>,
+                        <au>
+                            <s>Perley</s>
+                            <f>R. A.</f>
+                        </au>,
+                        <au>
+                            <s>Taylor</s>
+                            <f>G. B.</f>
+                        </au>,
+                        <au>
+                            <s>Broderick</s>
+                            <f>J. J.</f>
+                        </au>,
+                        <yr>1998</yr>,
+                        <pt>AJ</pt>,
+                        <v>115</v>,
+                        <pages>1693</pages>
+                        <?tsp type="ref-doi" data="10.1086/300337" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib8">
+                    <jcit>
+                        <au>
+                            <s>Cunnington</s>
+                            <f>S.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2023</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>523</v>,
+                        <pages>2453</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/stad1567" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib9">
+                    <jcit>
+                        <au>
+                            <s>Kern</s>
+                            <f>N. S.</f>
+                        </au>,
+                        <au>
+                            <s>Liu</s>
+                            <f>A.</f>
+                        </au>,
+                        <yr>2021</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>501</v>,
+                        <pages>1463</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/staa3736" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib10">
+                    <jcit>
+                        <au>
+                            <s>Masui</s>
+                            <f>K. W.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2013</yr>,
+                        <pt>ApJ</pt>,
+                        <v>763</v>,
+                        <pages>L20</pages>
+                        <?tsp type="ref-doi" data="10.1088/2041-8205/763/1/L20" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib11">
+                    <jcit>
+                        <collab exinfo="author">MeerKLASS Collaboration</collab>
+                        <yr>2025</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>537</v>,
+                        <pages>3632</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/staf195" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib12">
+                    <jcit>
+                        <collab exinfo="author">Planck Collaboration VI</collab>
+                        <yr>2020</yr>,
+                        <pt>A&amp;A</pt>,
+                        <v>641</v>,
+                        <pages>A6</pages>
+                        <?tsp type="ref-doi" data="10.1051/0004-6361/201833910" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib13">
+                    <jcit>
+                        <au>
+                            <s>Remazeilles</s>
+                            <f>M.</f>
+                        </au>,
+                        <au>
+                            <s>Dickinson</s>
+                            <f>C.</f>
+                        </au>,
+                        <au>
+                            <s>Banday</s>
+                            <f>A. J.</f>
+                        </au>,
+                        <au>
+                            <s>Bigot-Sazy</s>
+                            <f>M. A.</f>
+                        </au>,
+                        <au>
+                            <s>Ghosh</s>
+                            <f>T.</f>
+                        </au>,
+                        <yr>2015</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>451</v>,
+                        <pages>4311</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/stv1274" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib14">
+                    <othcit exinfo="other">
+                        <au>
+                            <s>Santos</s>
+                            <f>M.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2016</yr>, in
+                        <ot>MeerKAT Science: On the Pathway to the SKA</ot>. p.
+                        <pages>32</pages>,
+                        <misc1>preprint</misc1> (
+                        <arxiv>arXiv:1709.06099</arxiv>)
+                        <?tsp type="ref-doi" data="10.22323/1.277.0032" skip="true" objectname="ObjectProperty"?>
+                        <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_12">
+                            <queryText type="query">Please provide the publisher location (city/state/country)/publisher name for reference Santos et al. 2016 directly in the reference.</queryText>
+                        </query>
+                    </othcit>
+                </bib>
+                <bib id="bib15">
+                    <jcit>
+                        <au>
+                            <s>Switzer</s>
+                            <f>E. R.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2013</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>434</v>,
+                        <pages>L46</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnrasl/slt074" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib16">
+                    <jcit>
+                        <au>
+                            <s>Switzer</s>
+                            <f>E. R.</f>
+                        </au>,
+                        <au>
+                            <s>Chang</s>
+                            <f>T. C.</f>
+                        </au>,
+                        <au>
+                            <s>Masui</s>
+                            <f>K. W.</f>
+                        </au>,
+                        <au>
+                            <s>Pen</s>
+                            <f>U. L.</f>
+                        </au>,
+                        <au>
+                            <s>Voytek</s>
+                            <f>T. C.</f>
+                        </au>,
+                        <yr>2015</yr>,
+                        <pt>ApJ</pt>,
+                        <v>815</v>,
+                        <pages>51</pages>
+                        <?tsp type="ref-doi" data="10.1088/0004-637X/815/1/51" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib17">
+                    <jcit>
+                        <au>
+                            <s>Tegmark</s>
+                            <f>M.</f>
+                        </au>,
+                        <yr>1997</yr>,
+                        <pt>Phys. Rev. D</pt>,
+                        <v>55</v>,
+                        <pages>5895</pages>
+                        <?tsp type="ref-doi" data="10.1103/PhysRevD.55.5895" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib18">
+                    <jcit>
+                        <au>
+                            <s>Tegmark</s>
+                            <f>M.</f>
+                        </au>,
+                        <au>
+                            <s>Hamilton</s>
+                            <f>A. J. S.</f>
+                        </au>,
+                        <au>
+                            <s>Xu</s>
+                            <f>Y.</f>
+                        </au>,
+                        <yr>2002</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>335</v>,
+                        <pages>887</pages>
+                        <?tsp type="ref-doi" data="10.1046/j.1365-8711.2002.05622.x" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib19">
+                    <jcit>
+                        <au>
+                            <s>Villaescusa-Navarro</s>
+                            <f>F.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2018</yr>,
+                        <pt>ApJ</pt>,
+                        <v>866</v>,
+                        <pages>135</pages>
+                        <?tsp type="ref-doi" data="10.3847/1538-4357/aadba0" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib20">
+                    <jcit>
+                        <au>
+                            <s>Wang</s>
+                            <f>H.</f>
+                        </au>,
+                        <au>
+                            <s>Mena-Parra</s>
+                            <f>J.</f>
+                        </au>,
+                        <au>
+                            <s>Chen</s>
+                            <f>T.</f>
+                        </au>,
+                        <au>
+                            <s>Masui</s>
+                            <f>K.</f>
+                        </au>,
+                        <yr>2022</yr>,
+                        <pt>Phys. Rev. D</pt>,
+                        <v>106</v>,
+                        <pages>043534</pages>
+                        <?tsp type="ref-doi" data="10.1103/PhysRevD.106.043534" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib21">
+                    <othcit exinfo="other">
+                        <au>
+                            <s>Wang</s>
+                            <f>H.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2024</yr>,
+                        <misc1>preprint</misc1> (
+                        <arxiv>arXiv:2408.08949</arxiv>)
+                        <?tsp type="ref-doi" data="10.48550/arXiv.2408.08949" skip="true" objectname="ObjectProperty"?>
+                        <query type="source" fRole="Copyeditor" fWflID="2" fID="0" tID="0" tName="" tWflID="8" tRole="Author" id="query_13">
+                            <queryText type="query" fRole="Copy Editor Aptara" fID="284" fWflID="5" postedOn="07Jun25-03:31" fName="Aravind">Please provide updated publication details for preprint reference 'Wang et al. 2024', if available, directly in the reference.</queryText>
+                        </query>
+                    </othcit>
+                </bib>
+                <bib id="bib22">
+                    <jcit>
+                        <au>
+                            <s>Williams</s>
+                            <f>J.</f>
+                        </au>,
+                        <au>
+                            <s>McCallum</s>
+                            <f>N.</f>
+                        </au>,
+                        <au>
+                            <s>Rotti</s>
+                            <f>A.</f>
+                        </au>,
+                        <au>
+                            <s>Thomas</s>
+                            <f>D. B.</f>
+                        </au>,
+                        <au>
+                            <s>Battye</s>
+                            <f>R.</f>
+                        </au>,
+                        <au>
+                            <s>Brown</s>
+                            <f>M. L.</f>
+                        </au>,
+                        <yr>2021</yr>,
+                        <pt>J. Cosmol. Astropart. Phys.</pt>,
+                        <v>2021</v>,
+                        <pages>016</pages>
+                        <?tsp type="ref-doi" data="10.1088/1475-7516/2021/07/016" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib23">
+                    <jcit>
+                        <au>
+                            <s>Wolz</s>
+                            <f>L.</f>
+                        </au>,
+                        <au>
+                            <s>Abdalla</s>
+                            <f>F. B.</f>
+                        </au>,
+                        <au>
+                            <s>Blake</s>
+                            <f>C.</f>
+                        </au>,
+                        <au>
+                            <s>Shaw</s>
+                            <f>J. R.</f>
+                        </au>,
+                        <au>
+                            <s>Chapman</s>
+                            <f>E.</f>
+                        </au>,
+                        <au>
+                            <s>Rawlings</s>
+                            <f>S.</f>
+                        </au>,
+                        <yr>2014</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>441</v>,
+                        <pages>3271</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/stu792" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib24">
+                    <jcit>
+                        <au>
+                            <s>Wolz</s>
+                            <f>L.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2022</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>510</v>,
+                        <pages>3495</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/stab3621" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+                <bib id="bib25">
+                    <jcit>
+                        <au>
+                            <s>Zheng</s>
+                            <f>H.</f>
+                        </au>
+                        <etal>et al.</etal>,
+                        <yr>2017</yr>,
+                        <pt>MNRAS</pt>,
+                        <v>464</v>,
+                        <pages>3486</pages>
+                        <?tsp type="ref-doi" data="10.1093/mnras/stw2525" skip="true" objectname="ObjectProperty"?>
+                    </jcit>
+                </bib>
+            </ref>
+        </bm>
+    </doc>

@@ -115,7 +115,7 @@ class ChangeAnalyzer:
                 self.false_positives += 1
                 logger.debug(f"Skipping semantically equivalent change: {tag} {old_val} -> {new_val}")
                 continue
-
+                
             self.valid_changes += 1
             self.changed_paths.add(node)
             

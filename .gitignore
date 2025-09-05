@@ -3,9 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+.gradio/
 .Python
 /data
-gradio/
+.qodo/
+.cache/
 __pycache__/
 quodo/
 venv/

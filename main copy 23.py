@@ -1,15 +1,26 @@
+#!/usr/bin/env python3
+"""
+RAG XML Change Predictor - Main entry point
+"""
 import os
+import sys
+import asyncio
+import argparse
+from pathlib import Path
+
+# Add project root to Python path
+project_root = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, project_root)
+
+# Import local modules
+from utils.xml_diff import compare_xml_files
 import glob
 import json
 from collections import defaultdict
 from typing import List, Dict, Tuple
-from utils.xml_diff import compare_xml_files, compute_diff, read_xml, get_xpath
+from utils.xml_diff import clear_cache, compute_diff, get_metrics, read_xml, get_xpath
 from app.rag_predictor import XMLRAGPredictor
-import asyncio
-from pathlib import Path
 import logging
-import sys
-import argparse
 import re
 
 def normalize_text(text: str) -> str:
@@ -50,42 +61,18 @@ logger = logging.getLogger(__name__)
 
 class ChangeAnalyzer:
     def __init__(self):
-        self.change_patterns = defaultdict(lambda: defaultdict(dict))
+        self.change_patterns = defaultdict(lambda: defaultdict(int))
         self.tag_changes = defaultdict(int)
         self.change_types = defaultdict(int)
         self.changed_paths = set()
         self.false_positives = 0
         self.valid_changes = 0
 
-    def _get_semantic_similarity(self, text1: str, text2: str) -> float:
-        """Calculate semantic similarity between two text strings."""
-        import difflib
-        if not text1 or not text2:
-            return 0.0
-        return difflib.SequenceMatcher(None, text1, text2).ratio()
-
-    def _is_semantic_change(self, old_val: str, new_val: str, threshold: float = 0.9) -> tuple[bool, float]:
+    def _is_semantic_change(self, old_val: str, new_val: str) -> bool:
         """Check if there's a meaningful change between values."""
         if not old_val or not new_val:
-            return (True, 100.0)
-        similarity = self._get_semantic_similarity(old_val, new_val)
-        return (similarity < threshold, (1.0 - similarity) * 100)
-
-    def _categorize_change_type(self, old_val: str, new_val: str) -> str:
-        """Categorize the type of change based on content analysis."""
-        if not old_val:
-            return 'addition'
-        if not new_val:
-            return 'deletion'
-            
-        similarity = self._get_semantic_similarity(old_val, new_val) * 100  # Convert to percentage
-        
-        if similarity > 90:  # 0.9 * 100
-            return 'minor_edit'
-        elif similarity > 60:  # 0.6 * 100
-            return 'modification'
-        else:
-            return 'major_change'
+            return True
+        return normalize_text(old_val) != normalize_text(new_val)
 
     def analyze_diff(self, diff: List[Dict], v1_content: str, v2_content: str):
         """Analyze the diff and update change patterns with detailed information."""
@@ -97,8 +84,8 @@ class ChangeAnalyzer:
         for change in diff:
             action = change.get('action')
             node = change.get('node', '')
-            old_val = str(change.get('old_value', ''))
-            new_val = str(change.get('new_value', ''))
+            old_val = change.get('old_value', '')
+            new_val = change.get('new_value', '')
             xpath = change.get('xpath', node)
             
             if not node or not xpath:
@@ -107,15 +94,12 @@ class ChangeAnalyzer:
                 
             tag = node.split('/')[-1].split('[')[0] if node else 'unknown'
             
-            # Check for semantic change
-            is_change, confidence = self._is_semantic_change(old_val, new_val)
-            
-            # Skip if values are semantically equivalent with high confidence
-            if action == 'update' and not is_change and confidence > 80:  # 0.8 * 100
+            # Skip if values are semantically equivalent
+            if action == 'update' and not self._is_semantic_change(old_val, new_val):
                 self.false_positives += 1
                 logger.debug(f"Skipping semantically equivalent change: {tag} {old_val} -> {new_val}")
                 continue
-
+                
             self.valid_changes += 1
             self.changed_paths.add(node)
             
@@ -123,53 +107,37 @@ class ChangeAnalyzer:
                 self.tag_changes[tag] += 1
 
             self.change_types[action] += 1
-            
-            # Categorize the change while maintaining original pattern format
+
+            # Track change patterns
             if action == 'update' and old_val and new_val:
                 pattern = f"{tag}: {old_val} -> {new_val}"
-                change_type = self._categorize_change_type(old_val, new_val)
-            elif action == 'insert':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'insert' and new_val:
                 pattern = f"Add {tag}: {new_val}"
-                change_type = 'addition'
-                confidence = 100.0  # 100% confidence for additions
-            elif action == 'delete':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'delete' and old_val:
                 pattern = f"Remove {tag}: {old_val}"
-                change_type = 'deletion'
-                confidence = 100.0  # 100% confidence for deletions
-            else:
-                # Skip any other action types
-                continue
-                
-            # Store the change with its metadata
-            self.change_patterns[tag][pattern] = {
-                'count': self.change_patterns[tag].get(pattern, {}).get('count', 0) + 1,
-                'type': change_type,
-                'confidence': confidence  # Already in percentage
-            }
+                self.change_patterns[tag][pattern] += 1
                 
         logger.info(f"Processed {self.valid_changes} valid changes, filtered {self.false_positives} false positives")
 
-    def get_most_common_changes(self, top_n: int = 5) -> List[Dict]:
+    def get_most_common_changes(self, top_n: int = 5) -> List[Tuple[str, int]]:
         """Get the most common change patterns across all tags."""
         all_changes = []
         for tag, patterns in self.change_patterns.items():
-            for pattern, data in patterns.items():
-                all_changes.append({
-                    'pattern': pattern,
-                    'count': data['count'],
-                    'type': data.get('type', 'unknown'),
-                    'confidence': data.get('confidence', 1.0)
-                })
+            for pattern, count in patterns.items():
+                all_changes.append((pattern, count))
 
-        return sorted(all_changes, key=lambda x: x['count'], reverse=True)[:top_n]
+        return sorted(all_changes, key=lambda x: x[1], reverse=True)[:top_n]
 
     def get_changes_by_tag(self, tag: str, top_n: int = 3) -> List[Tuple[str, int]]:
         """Get the most common changes for a specific tag."""
         if tag in self.change_patterns:
-            changes = []
-            for pattern, data in self.change_patterns[tag].items():
-                changes.append((pattern, data['count']))
-            return sorted(changes, key=lambda x: x[1], reverse=True)[:top_n]
+            return sorted(
+                self.change_patterns[tag].items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:top_n]
         return []
 
     def get_most_changed_tags(self, top_n: int = 3, min_count: int = 2) -> List[Tuple[str, int]]:
@@ -217,13 +185,19 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
                     skipped_files += 1
                     continue
 
+
+                # Please do not remove this comment block
                 # Perform the diff with enhanced validation
+                # diff = compare_xml_files(v1_path, v2_path)
+
                 diff = compare_xml_files(v1_path, v2_path)
+                
+                metrics_data = get_metrics()
+                log_metrics(metrics_data)
                 
                 if diff:
                     analyzer.analyze_diff(diff, v1_content, v2_content)
                     
-                    # Only write diffs that passed validation
                     valid_diffs = [d for d in diff if d.get('xpath')]
                     if valid_diffs:
                         diff_entry = {
@@ -267,14 +241,61 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
     
     return analyzer
 
-def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
+def log_metrics(metrics_data: Dict):
+    """Log metrics in a structured and readable format."""
+    if not metrics_data:
+        return
+    
+    logger.info("\n=== XML Comparison Metrics ===")
+    
+    # Comparison metrics
+    comp_metrics = metrics_data.get('comparison_metrics', {})
+    if comp_metrics:
+        logger.info("\nComparison Statistics:")
+        logger.info(f"  - Total comparisons: {comp_metrics.get('total_comparisons', 0)}")
+        logger.info(f"  - Cache hits: {comp_metrics.get('cache_hits', 0)}")
+        logger.info(f"  - Cache misses: {comp_metrics.get('cache_misses', 0)}")
+        logger.info(f"  - Cache hit ratio: {comp_metrics.get('cache_hit_ratio', 0):.1%}")
+        logger.info(f"  - Average comparison time: {comp_metrics.get('avg_comparison_time', 0):.3f}s")
+        logger.info(f"  - Total errors: {comp_metrics.get('total_errors', 0)}")
+        logger.info(f"  - Average file size: {comp_metrics.get('avg_file_size', 0) / 1024:.2f} KB")
+    
+    # Cache metrics
+    cache_metrics = metrics_data.get('cache_metrics', {})
+    if cache_metrics:
+        logger.info("\nCache Statistics:")
+        logger.info(f"  - Cache enabled: {cache_metrics.get('cache_enabled', False)}")
+        logger.info(f"  - Cache directory: {cache_metrics.get('cache_dir', 'N/A')}")
+        logger.info(f"  - Cached items: {cache_metrics.get('cached_items', 0)}")
+        logger.info(f"  - Cache size: {cache_metrics.get('cache_size_mb', 0):.2f} MB")
+        logger.info(f"  - Cache TTL: {cache_metrics.get('cache_ttl_seconds', 0) / 3600:.1f} hours")
+    
+    # System info
+    sys_info = metrics_data.get('system', {})
+    if sys_info:
+        logger.info("\nSystem Information:")
+        logger.info(f"  - Python version: {sys_info.get('python_version', 'N/A')}")
+        logger.info(f"  - Platform: {sys_info.get('platform', 'N/A')}")
+        logger.info(f"  - Timestamp: {sys_info.get('timestamp', 'N/A')}")
+    
+    logger.info("\n" + "="*50 + "\n")
+
+def load_analyzer_from_diffs(journal: str) -> ChangeAnalyzer:
     """
-    Load and aggregate processed diffs for analysis.
-    If journal is specified, only load diffs for that journal.
+    Load and aggregate processed diffs for analysis from a specific journal.
     
     Args:
-        journal: Optional journal name to filter diffs
+        journal: Journal name to load diffs for (required)
+        
+    Returns:
+        ChangeAnalyzer: An instance of ChangeAnalyzer with loaded diff data
+        
+    Raises:
+        ValueError: If journal is not provided or is empty
     """
+    if not journal:
+        raise ValueError("Journal name is required")
+        
     analyzer = ChangeAnalyzer()
     processed_dir = "processed"
     
@@ -282,16 +303,12 @@ def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
         logger.warning(f"No processed directory found at {processed_dir}")
         return analyzer
     
-    # If journal is specified, only process that journal's directory
-    if journal:
-        journal_dirs = [os.path.join(processed_dir, journal)]
-    else:
-        # Otherwise process all journals
-        journal_dirs = [
-            os.path.join(processed_dir, d) 
-            for d in os.listdir(processed_dir)
-            if os.path.isdir(os.path.join(processed_dir, d))
-        ]
+    journal_dir = os.path.join(processed_dir, journal)
+    if not os.path.exists(journal_dir):
+        logger.warning(f"No directory found for journal: {journal}")
+        return analyzer
+        
+    journal_dirs = [journal_dir]
     
     total_files = 0
     lines = 0
@@ -311,14 +328,12 @@ def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
                     for line in f:
                         try:
                             entry = json.loads(line)
-                            # Only process entries for the specified journal if filtering
-                            if journal is None or entry.get('journal') == journal:
-                                analyzer.analyze_diff(
-                                    entry['diff'],
-                                    "",  # Original content not needed for analysis
-                                    ""   # New content not needed for analysis
-                                )
-                                lines += 1
+                            analyzer.analyze_diff(
+                                entry['diff'],
+                                "",  # Original content not needed for analysis
+                                ""   # New content not needed for analysis
+                            )
+                            lines += 1
                         except json.JSONDecodeError as e:
                             logger.warning(f"Error parsing JSON in {diff_file}: {e}")
                             continue
@@ -327,7 +342,7 @@ def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
                 logger.error(f"Error reading {diff_file}: {e}")
                 continue
     
-    logger.info(f"Loaded {lines} diffs from {total_files} files for journal: {journal or 'all'}")
+    logger.info(f"Loaded {lines} diffs from {total_files} files for journal: {journal}")
     return analyzer
 
 def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
@@ -458,6 +473,10 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
         }
 
 async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, journal: str = "mnras"):
+    # Clear cache at the start of processing
+    clear_cache()
+    logger.info("Cleared XML diff cache at the start of processing")
+    
     result = {
         'status': 'error',
         'message': 'No files processed',
@@ -476,6 +495,7 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
         predictor = XMLRAGPredictor(persist_dir="vectorstore")
         try:
             print("\nTraining RAG model (this may take a few minutes)...")
+            # Please do not remove this comment block
             # await asyncio.wait_for(
             #     predictor.train_from_diffs(
             #         "processed/diffs.jsonl",
@@ -491,8 +511,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             print(f"\nError during training: {str(e)}")
         print("\n=== Change Analysis ===")
         print("\nMost common change patterns:")
-        for change in analyzer.get_most_common_changes(5):
-            print(f"- {change['pattern']} (x{change['count']}) - Type: {change['type']}, Confidence: {change.get('confidence', 1.0):.2f}")
+        for pattern, count in analyzer.get_most_common_changes(5):
+            print(f"- {pattern} (x{count})")
 
         print("\nMost frequently changed tags:")
         for tag, count in analyzer.get_most_changed_tags(5):
@@ -514,7 +534,7 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             try:
                 with open(test_file, 'r', encoding='utf-8') as f:
                     test_xml = f.read()
-
+                # Please do not remove this code block
                 # Get RAG predictions (commented out for now)
                 # print("\n=== RAG Predictions ===")
                 # rag_predictions = await predictor.predict_changes(test_xml)
@@ -544,13 +564,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
                     'suggested_changes': predictions.get("suggested_changes", []),
                     'potential_improvements': predictions.get("potential_improvements", []),
                     'change_patterns': [
-                        { 
-                            'pattern': change['pattern'], 
-                            'frequency': change['count'],
-                            'type': change.get('type', 'unknown'),
-                            'confidence': change.get('confidence', 1.0)
-                        }
-                        for change in analyzer.get_most_common_changes(10)
+                        { 'pattern': pattern, 'frequency': freq }
+                        for pattern, freq in analyzer.get_most_common_changes(10)
                     ],
                     'file_analyzed': str(test_file),
                     'status': 'completed'
@@ -566,12 +581,24 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             except Exception as e:
                 print(f"Error processing {test_file}: {str(e)}")
                 result['message'] = f"Error processing {test_file}: {str(e)}"
+        result['status'] = 'success'
+        result['message'] = 'Processing completed successfully'
+        
+        cache_stats = get_metrics()
+        logger.info(f"Cache statistics: {json.dumps(cache_stats, indent=2)}")
+        
+        clear_cache()
+        logger.info("Cleared XML diff cache after processing")
+        
         return result
+        
     except Exception as e:
-        print(f"\nAn error occurred: {str(e)}")
-        result['message'] = str(e)
+        logger.error(f"Error in run_pipeline: {str(e)}", exc_info=True)
+        result['message'] = f'Error: {str(e)}'
         return result
     finally:
+        clear_cache()
+        logger.info("Ensured XML diff cache is cleared")
         if 'predictor' in locals():
             del predictor
         tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
@@ -579,121 +606,39 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
 
-# Usage example (do NOT replace main workflow):
-# analyzer = load_analyzer_from_diffs(journal="mnras") use this whenever we need to skip the prediction generation
-# ... use 'analyzer' for pattern predictions ...
+def run_tests():
+    """Run test suite for the application."""
+    print("Running test suite...")
+    try:
+        # Import here to avoid circular imports
+        from tests.test_xml_diff import run_xml_diff_tests
+        return run_xml_diff_tests()
+    except ImportError as e:
+        print(f"Error importing test module: {e}")
+        print("Make sure you're running from the project root directory.")
+        return 1
 
-def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
-    """
-    Load and aggregate processed diffs for analysis.
-    If journal is specified, only load diffs for that journal.
+def main():
+    """Main entry point for the application."""
+    import argparse
     
-    Args:
-        journal: Optional journal name to filter diffs
-    """
-    analyzer = ChangeAnalyzer()
-    processed_dir = "processed"
+    parser = argparse.ArgumentParser(description='RAG XML Change Predictor')
+    parser.add_argument('--test', action='store_true', help='Run test suite')
+    parser.add_argument('--file', type=str, help='Process a single XML file')
+    parser.add_argument('--dir', type=str, help='Process all XML files in a directory')
     
-    if not os.path.exists(processed_dir):
-        logger.warning(f"No processed directory found at {processed_dir}")
-        return analyzer
+    args = parser.parse_args()
     
-    # If journal is specified, only process that journal's directory
-    if journal:
-        journal_dirs = [os.path.join(processed_dir, journal)]
+    if args.test:
+        return run_tests()
+    elif args.file:
+        return run_pipeline(file_path=args.file)
+    elif args.dir:
+        return run_pipeline(journal=args.dir)
     else:
-        # Otherwise process all journals
-        journal_dirs = [
-            os.path.join(processed_dir, d) 
-            for d in os.listdir(processed_dir)
-            if os.path.isdir(os.path.join(processed_dir, d))
-        ]
-    
-    total_files = 0
-    lines = 0
-    
-    for journal_dir in journal_dirs:
-        if not os.path.isdir(journal_dir):
-            logger.warning(f"Skipping non-directory: {journal_dir}")
-            continue
-            
-        # Find all diff files for this journal
-        diff_files = sorted(glob.glob(os.path.join(journal_dir, 'diffs_*.jsonl'))) or \
-                    sorted(glob.glob(os.path.join(journal_dir, 'diffs.jsonl*')))
-        
-        for diff_file in diff_files:
-            try:
-                with open(diff_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        try:
-                            entry = json.loads(line)
-                            # Only process entries for the specified journal if filtering
-                            if journal is None or entry.get('journal') == journal:
-                                analyzer.analyze_diff(
-                                    entry['diff'],
-                                    "",  # Original content not needed for analysis
-                                    ""   # New content not needed for analysis
-                                )
-                                lines += 1
-                        except json.JSONDecodeError as e:
-                            logger.warning(f"Error parsing JSON in {diff_file}: {e}")
-                            continue
-                total_files += 1
-            except Exception as e:
-                logger.error(f"Error reading {diff_file}: {e}")
-                continue
-    
-    logger.info(f"Loaded {lines} diffs from {total_files} files for journal: {journal or 'all'}")
-    return analyzer
+        parser.print_help()
+        return 0
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="XML Change Predictor with RAG - journal support")
-    parser.add_argument("--journal", type=str, required=True, help="Journal name for subdirectory under data/<journal>/v1,v2")
-    parser.add_argument("--file", type=str, default=None, help="Specific XML file to process (optional)")
-    args = parser.parse_args()
-
-    # Immediate exit if --journal is empty or just whitespace
-    if not args.journal or not args.journal.strip():
-        print("Error: --journal argument must be a non-empty value. Exiting.")
-        sys.exit(1)
-
-    # Immediate exit if data/<journal> directory does not exist
-    journal_dir = os.path.join("data", args.journal)
-    if not os.path.isdir(journal_dir):
-        print(f"Error: Journal data directory '{journal_dir}' does not exist. Exiting.")
-        sys.exit(1)
-        
-    # Set up paths with journal name
-    v1_dir = os.path.join(journal_dir, "v1")
-    v2_dir = os.path.join(journal_dir, "v2")
-    output_dir = "processed"
-    
-    # Option 1: Generate new diffs (default)
-    # Comment this block to use existing diffs instead
-    print(f"Analyzing changes between {v1_dir} and {v2_dir} files...")
-    analyzer = extract_and_save_diffs(
-        v1_folder=v1_dir,
-        v2_folder=v2_dir,
-        output_dir=output_dir,
-        journal=args.journal
-    )
-
-    # Option 2: Use existing diffs
-    # Uncomment below to use pre-generated diffs instead of processing files
-    # analyzer = load_analyzer_from_diffs(journal=args.journal)
-    try:
-        # Pass the analyzer to run_pipeline to avoid duplicate processing
-        asyncio.run(run_pipeline(analyzer=analyzer, file_path=args.file, journal=args.journal))
-    except KeyboardInterrupt:
-        print("\nOperation cancelled by user")
-    except Exception as e:
-        print(f"\nAn error occurred: {str(e)}")
-    finally:
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                loop.stop()
-                loop.close()
-        except:
-            pass
-        print("\nCleanup complete. Exiting...")
+    import sys
+    sys.exit(main())

@@ -116,18 +116,33 @@ class XMLAnalyzerApp:
         ).pack(anchor='center')
         # End HERO CARD HEADER
 
-        # JOURNAL SELECTION (Commented out for demo)
-        # journal_frame = ttk.LabelFrame(
-        #     self.main_frame,
-        #     text=" Select Journal (Data Source) ",
-        #     padding=15,
-        #     style='Card.TLabelframe'
-        # )
-        # journal_frame.pack(fill=tk.X, pady=(0, 15))
+        # JOURNAL SELECTION
+        journal_frame = ttk.LabelFrame(
+            self.main_frame,
+            text=" Select Journal (Data Source) ",
+            padding=15,
+            style='Card.TLabelframe'
+        )
+        journal_frame.pack(fill=tk.X, pady=(0, 15))
 
-        # Default to 'mnras' journal for demo
-        self.available_journals = ["mnras"]
-        self.journal_var = tk.StringVar(value="mnras")
+        self.available_journals = self.get_journal_folders()
+        self.journal_var = tk.StringVar()
+        self.journal_combo = ttk.Combobox(
+            journal_frame,
+            textvariable=self.journal_var,
+            values=self.available_journals,
+            state="readonly" if self.available_journals else "disabled",
+            font=('Segoe UI', 11),
+            width=45
+        )
+        self.journal_combo.pack(side=tk.LEFT, padx=(0, 10), fill=tk.X, expand=True)
+        self.journal_combo.bind("<<ComboboxSelected>>", lambda e: self.on_journal_selected())
+        if self.available_journals:
+            self.status_var.set("Please select a journal before analysis.")
+        else:
+            self.status_var.set("No journals found under data/. Please add a journal folder.")
+
+        # End JOURNAL SELECTION
         
         # File selection
         self.file_frame = ttk.LabelFrame(
@@ -277,8 +292,6 @@ class XMLAnalyzerApp:
         
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
-        self.on_journal_selected()  # Enable UI elements
-
     def on_closing(self):
         """Handle window close event"""
         sys.stdout = sys.__stdout__ 
@@ -366,20 +379,16 @@ class XMLAnalyzerApp:
         except Exception:
             return []
 
-    def on_journal_selected(self, *args):
-        """Handle journal selection"""
+    def on_journal_selected(self):
         selected = self.journal_var.get()
-        if hasattr(self, 'browse_btn'):  # Check if browse_btn exists yet
-            if not selected:
-                self.browse_btn.config(state=tk.DISABLED)
-                if hasattr(self, 'analyze_btn'):
-                    self.analyze_btn.config(state=tk.DISABLED)
-                self.status_var.set("Please select a journal before analysis.")
-            else:
-                self.browse_btn.config(state=tk.NORMAL)
-                if hasattr(self, 'analyze_btn'):
-                    self.analyze_btn.config(state=tk.NORMAL)
-                self.status_var.set(f"Ready: Journal '{selected}' selected.")
+        if not selected:
+            self.browse_btn.config(state=tk.DISABLED)
+            self.analyze_btn.config(state=tk.DISABLED)
+            self.status_var.set("Please select a journal before analysis.")
+        else:
+            self.browse_btn.config(state=tk.NORMAL)
+            self.analyze_btn.config(state=tk.NORMAL)
+            self.status_var.set(f"Ready: Journal '{selected}' selected.")    
     
     def check_thread_status(self, thread):
         if thread.is_alive():

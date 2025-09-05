@@ -14,7 +14,7 @@ import sys
 logger = logging.getLogger(__name__)
 
 # Cache configuration
-CACHE_ENABLED = False
+CACHE_ENABLED = True
 CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.cache', 'xml_diff')
 os.makedirs(CACHE_DIR, exist_ok=True)
 CACHE_TTL = 3600  # 1 hour cache TTL
@@ -247,7 +247,7 @@ class XMLDiff:
                     node = str(change[1]) if len(change) > 1 else ''
                     old_value = str(change[2]) if len(change) > 2 else ''
                     new_value = str(change[3]) if len(change) > 3 else ''
-                    xpath = node
+                    xpath = node  # For tuple format, node contains the XPath
                 else:
                     action = safe_get_attr(change, 'action', 'unknown')
                     node = safe_get_attr(change, 'node', '')
@@ -255,6 +255,7 @@ class XMLDiff:
                     new_value = safe_get_attr(change, 'new_value', '')
                     xpath = safe_get_attr(change, 'xpath', node)
                 
+                # Skip if values are effectively the same after normalization
                 if action == 'update' and normalize_text(old_value) == normalize_text(new_value):
                     logger.debug(f"Skipping semantically equal values: {old_value} -> {new_value}")
                     continue

@@ -10,28 +10,6 @@ from pathlib import Path
 import logging
 import sys
 import argparse
-import re
-
-def normalize_text(text: str) -> str:
-    """
-    Normalize text for comparison by:
-    1. Converting to lowercase
-    2. Replacing multiple whitespace characters with a single space
-    3. Stripping leading/trailing whitespace
-    
-    Args:
-        text: Input text to normalize
-        
-    Returns:
-        Normalized text string
-    """
-    if not text or not isinstance(text, str):
-        return ""
-    # Convert to lowercase
-    text = text.lower()
-    # Replace multiple whitespace with single space and strip
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
 
 # Set up logging with better formatting
 def setup_logging():
@@ -50,126 +28,54 @@ logger = logging.getLogger(__name__)
 
 class ChangeAnalyzer:
     def __init__(self):
-        self.change_patterns = defaultdict(lambda: defaultdict(dict))
+        self.change_patterns = defaultdict(lambda: defaultdict(int))
         self.tag_changes = defaultdict(int)
         self.change_types = defaultdict(int)
         self.changed_paths = set()
-        self.false_positives = 0
-        self.valid_changes = 0
-
-    def _get_semantic_similarity(self, text1: str, text2: str) -> float:
-        """Calculate semantic similarity between two text strings."""
-        import difflib
-        if not text1 or not text2:
-            return 0.0
-        return difflib.SequenceMatcher(None, text1, text2).ratio()
-
-    def _is_semantic_change(self, old_val: str, new_val: str, threshold: float = 0.9) -> tuple[bool, float]:
-        """Check if there's a meaningful change between values."""
-        if not old_val or not new_val:
-            return (True, 100.0)
-        similarity = self._get_semantic_similarity(old_val, new_val)
-        return (similarity < threshold, (1.0 - similarity) * 100)
-
-    def _categorize_change_type(self, old_val: str, new_val: str) -> str:
-        """Categorize the type of change based on content analysis."""
-        if not old_val:
-            return 'addition'
-        if not new_val:
-            return 'deletion'
-            
-        similarity = self._get_semantic_similarity(old_val, new_val) * 100  # Convert to percentage
-        
-        if similarity > 90:  # 0.9 * 100
-            return 'minor_edit'
-        elif similarity > 60:  # 0.6 * 100
-            return 'modification'
-        else:
-            return 'major_change'
 
     def analyze_diff(self, diff: List[Dict], v1_content: str, v2_content: str):
         """Analyze the diff and update change patterns with detailed information."""
-        if not diff:
-            return
-            
-        logger.debug(f"Analyzing {len(diff)} potential changes...")
-        
         for change in diff:
             action = change.get('action')
             node = change.get('node', '')
-            old_val = str(change.get('old_value', ''))
-            new_val = str(change.get('new_value', ''))
-            xpath = change.get('xpath', node)
-            
-            if not node or not xpath:
-                logger.debug(f"Skipping change with missing node/xpath: {change}")
-                continue
-                
+            old_val = change.get('old_value', '')
+            new_val = change.get('new_value', '')
+            if node:
+                self.changed_paths.add(node)
             tag = node.split('/')[-1].split('[')[0] if node else 'unknown'
-            
-            # Check for semantic change
-            is_change, confidence = self._is_semantic_change(old_val, new_val)
-            
-            # Skip if values are semantically equivalent with high confidence
-            if action == 'update' and not is_change and confidence > 80:  # 0.8 * 100
-                self.false_positives += 1
-                logger.debug(f"Skipping semantically equivalent change: {tag} {old_val} -> {new_val}")
-                continue
 
-            self.valid_changes += 1
-            self.changed_paths.add(node)
-            
             if tag and tag != 'unknown':
                 self.tag_changes[tag] += 1
 
             self.change_types[action] += 1
-            
-            # Categorize the change while maintaining original pattern format
+
             if action == 'update' and old_val and new_val:
                 pattern = f"{tag}: {old_val} -> {new_val}"
-                change_type = self._categorize_change_type(old_val, new_val)
-            elif action == 'insert':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'insert' and new_val:
                 pattern = f"Add {tag}: {new_val}"
-                change_type = 'addition'
-                confidence = 100.0  # 100% confidence for additions
-            elif action == 'delete':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'delete' and old_val:
                 pattern = f"Remove {tag}: {old_val}"
-                change_type = 'deletion'
-                confidence = 100.0  # 100% confidence for deletions
-            else:
-                # Skip any other action types
-                continue
-                
-            # Store the change with its metadata
-            self.change_patterns[tag][pattern] = {
-                'count': self.change_patterns[tag].get(pattern, {}).get('count', 0) + 1,
-                'type': change_type,
-                'confidence': confidence  # Already in percentage
-            }
-                
-        logger.info(f"Processed {self.valid_changes} valid changes, filtered {self.false_positives} false positives")
+                self.change_patterns[tag][pattern] += 1
 
-    def get_most_common_changes(self, top_n: int = 5) -> List[Dict]:
+    def get_most_common_changes(self, top_n: int = 5) -> List[Tuple[str, int]]:
         """Get the most common change patterns across all tags."""
         all_changes = []
         for tag, patterns in self.change_patterns.items():
-            for pattern, data in patterns.items():
-                all_changes.append({
-                    'pattern': pattern,
-                    'count': data['count'],
-                    'type': data.get('type', 'unknown'),
-                    'confidence': data.get('confidence', 1.0)
-                })
+            for pattern, count in patterns.items():
+                all_changes.append((pattern, count))
 
-        return sorted(all_changes, key=lambda x: x['count'], reverse=True)[:top_n]
+        return sorted(all_changes, key=lambda x: x[1], reverse=True)[:top_n]
 
     def get_changes_by_tag(self, tag: str, top_n: int = 3) -> List[Tuple[str, int]]:
         """Get the most common changes for a specific tag."""
         if tag in self.change_patterns:
-            changes = []
-            for pattern, data in self.change_patterns[tag].items():
-                changes.append((pattern, data['count']))
-            return sorted(changes, key=lambda x: x[1], reverse=True)[:top_n]
+            return sorted(
+                self.change_patterns[tag].items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:top_n]
         return []
 
     def get_most_changed_tags(self, top_n: int = 3, min_count: int = 2) -> List[Tuple[str, int]]:
@@ -179,17 +85,29 @@ class ChangeAnalyzer:
 
 def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, journal: str, progress_step: int = 500, max_lines_per_file: int = 5000):
     """
-    Extract diffs between v1 and v2 XML files with enhanced validation.
+    Extract diffs between v1 and v2 XML files and analyze changes.
+    Processes files in batches, writes progress, and splits output if needed.
+    Skips files that cannot be processed and continues with the next file.
+    
+    Args:
+        v1_folder: Path to folder containing v1 XML files
+        v2_folder: Path to folder containing v2 XML files
+        output_dir: Base output directory for diff files
+        journal: Journal name for organizing diff files
+        progress_step: Print progress every N files
+        max_lines_per_file: Maximum number of lines per output file before splitting
     """
     analyzer = ChangeAnalyzer()
-    v1_files = sorted(glob.glob(os.path.join(v1_folder, '*.xml')))
+    v1_files = sorted(glob.glob(os.path.join(v1_folder, '*.xml')))[:1000]
     total = len(v1_files)
     file_count = 1
     lines_written = 0
     
+    # Create journal-specific output directory
     journal_output_dir = os.path.join(output_dir, journal)
     os.makedirs(journal_output_dir, exist_ok=True)
     
+    # Base output file path with journal name
     base_output = os.path.join(journal_output_dir, 'diffs.jsonl')
     current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
     
@@ -202,13 +120,14 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
             filename = os.path.basename(v1_path)
             v2_path = os.path.join(v2_folder, filename)
             
+            # Skip if v2 file doesn't exist
             if not os.path.exists(v2_path):
                 logger.warning(f"Skipping {filename}: v2 file not found at {v2_path}")
                 skipped_files += 1
                 continue
                 
             try:
-                logger.debug(f"Processing {filename}...")
+                # Process the file
                 v1_content = read_xml(v1_path)
                 v2_content = read_xml(v2_path)
 
@@ -217,37 +136,37 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
                     skipped_files += 1
                     continue
 
-                # Perform the diff with enhanced validation
-                diff = compare_xml_files(v1_path, v2_path)
+                # Please do not remove this comment
+                # Try deep diff (if model/API available), else fallback to classic
+                # from utils.xml_diff import compute_diff_deep
+                # diff = compute_diff_deep(v1_path, v2_path)
+                # diff = compare_xml_files(v1_path, v2_path)
+                
+                diff = compute_diff(v1_path, v2_path)
+                
                 
                 if diff:
                     analyzer.analyze_diff(diff, v1_content, v2_content)
+                    diff_entry = {
+                        'filename': filename,
+                        'journal': journal,
+                        'diff': [d if isinstance(d, dict) else d.to_dict() for d in diff]
+                    }
+                    out.write(json.dumps(diff_entry) + '\n')
+                    lines_written += 1
                     
-                    # Only write diffs that passed validation
-                    valid_diffs = [d for d in diff if d.get('xpath')]
-                    if valid_diffs:
-                        diff_entry = {
-                            'filename': filename,
-                            'journal': journal,
-                            'diff': valid_diffs
-                        }
-                        out.write(json.dumps(diff_entry) + '\n')
-                        lines_written += 1
-                        
-                        if lines_written >= max_lines_per_file:
-                            out.close()
-                            file_count += 1
-                            current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
-                            out = open(current_output, 'w', encoding='utf-8')
-                            lines_written = 0
+                    if lines_written >= max_lines_per_file:
+                        out.close()
+                        file_count += 1
+                        current_output = f"{os.path.splitext(base_output)[0]}_{file_count}.jsonl"
+                        out = open(current_output, 'w', encoding='utf-8')
+                        lines_written = 0
 
                 processed_files += 1
                 
                 if idx % progress_step == 0 or idx == total:
-                    logger.info(f"Processed {idx}/{total} files ({idx/total*100:.1f}%)")
-                    logger.info(f"  - Valid changes: {analyzer.valid_changes}")
-                    logger.info(f"  - False positives filtered: {analyzer.false_positives}")
-                    logger.info(f"  - Output file: {current_output}")
+                    logger.info(f"Processed {idx}/{total} files ({idx/total*100:.1f}%), "
+                              f"Skipped: {skipped_files}, Output file: {current_output}")
             
             except Exception as e:
                 logger.error(f"Error processing {filename}: {str(e)}", exc_info=True)
@@ -262,9 +181,6 @@ def extract_and_save_diffs(v1_folder: str, v2_folder: str, output_dir: str, jour
         out.close()
         
     logger.info(f"Processing complete. Processed: {processed_files}, Skipped: {skipped_files}")
-    logger.info(f"Total valid changes: {analyzer.valid_changes}")
-    logger.info(f"Total false positives filtered: {analyzer.false_positives}")
-    
     return analyzer
 
 def load_analyzer_from_diffs(journal: str = None) -> ChangeAnalyzer:
@@ -346,7 +262,6 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                 'suggested_changes': [],
                 'potential_improvements': []
             }
-            
         elements = {}
         for elem in root.iter():
             if elem.text and elem.text.strip():
@@ -368,17 +283,9 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
             tag = elem_info['tag']
             current_text = elem_info['text']
 
-            # Check if any parent path is in changed_paths
-            path_parts = path.split('/')
-            is_changed = any(
-                '/'.join(path_parts[:i+1]) in analyzer.changed_paths 
-                for i in range(1, len(path_parts))
-            )
-            
-            if not is_changed:
+            if path not in analyzer.changed_paths:
                 continue
 
-            # Get common changes for this tag
             common_changes = analyzer.get_changes_by_tag(tag)
 
             for pattern, frequency in common_changes:
@@ -397,65 +304,48 @@ def generate_change_prediction(analyzer: ChangeAnalyzer, new_xml: str) -> Dict:
                                     'to': new_text,
                                     'confidence': confidence,
                                     'pattern': pattern,
+                                    # 'occurrence': frequency
                                 }
                             })
-                    except Exception as e:
-                        logger.warning(f"Error processing pattern '{pattern}': {e}")
+                    except (IndexError, ValueError):
                         continue
 
-        # Add potential improvements based on frequently changed tags
-        for tag, count in analyzer.get_most_changed_tags():
-            # Only consider tags that exist in the current document
-            matching_elements = [(p, e) for p, e in elements.items() if e['tag'] == tag]
-            
-            if not matching_elements:
-                continue
-                
-            # Get the first matching element for this tag
-            path, elem_info = matching_elements[0]
-            
-            # Get sample changes for this tag
-            sample_changes = analyzer.get_changes_by_tag(tag, top_n=3)
-            if not sample_changes:
-                continue
-                
-            # Format examples
-            examples = "; ".join([
-                f"{p.split('->')[0].strip()} -> {p.split('->')[1].strip() if '->' in p else '...'}" 
-                for p, _ in sample_changes
-            ])
-            
-            # Calculate confidence based on frequency
-            confidence = min(80, 10 + count * 10)
-            
-            predictions['potential_improvements'].append({
-                'tag': tag,
-                'xpath': path,
-                'current_value': elem_info['text'],
-                'suggestion': (
-                    f"This <{tag}> element was frequently modified in previous versions. "
-                    f"Examples: {examples}" if examples else
-                    f"This <{tag}> element was frequently modified in previous versions."
-                ),
-                'confidence': confidence
+        for pattern, frequency in analyzer.get_most_common_changes():
+            predictions['change_patterns'].append({
+                'pattern': pattern,
+                'frequency': frequency
             })
+
+        for tag, count in analyzer.get_most_changed_tags():
+            if tag in [e['tag'] for e in elements.values()]:
+                for path, elem_info in elements.items():
+                    if elem_info['tag'] == tag:
+                        confidence = min(80, count * 15)
+                        sample_changes = analyzer.get_changes_by_tag(tag, top_n=3)
+                        examples = "; ".join([p for p, _ in sample_changes])
+                        suggestion = (
+                            f"This <{tag}> element was frequently modified in previous versions. "
+                            f"Examples: {examples}" if examples else
+                            f"This <{tag}> element was frequently modified in previous versions."
+                        )
+                        predictions['potential_improvements'].append({
+                            'tag': tag,
+                            'xpath': path,
+                            'current_value': elem_info['text'],
+                            'suggestion': suggestion,
+                            'confidence': confidence
+                        })
+                        break
 
         return predictions
 
-    except ET.XMLSyntaxError as e:
-        logger.error(f"XML syntax error: {e}")
+    except ET.ParseError as e:
         return {
-            'error': f'Invalid XML: {str(e)}',
+            'error': f'Error parsing XML: {str(e)}',
             'suggested_changes': [],
             'potential_improvements': []
         }
-    except Exception as e:
-        logger.error(f"Error generating predictions: {e}", exc_info=True)
-        return {
-            'error': f'Unexpected error: {str(e)}',
-            'suggested_changes': [],
-            'potential_improvements': []
-        }
+
 
 async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, journal: str = "mnras"):
     result = {
@@ -491,8 +381,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             print(f"\nError during training: {str(e)}")
         print("\n=== Change Analysis ===")
         print("\nMost common change patterns:")
-        for change in analyzer.get_most_common_changes(5):
-            print(f"- {change['pattern']} (x{change['count']}) - Type: {change['type']}, Confidence: {change.get('confidence', 1.0):.2f}")
+        for pattern, count in analyzer.get_most_common_changes(5):
+            print(f"- {pattern} (x{count})")
 
         print("\nMost frequently changed tags:")
         for tag, count in analyzer.get_most_changed_tags(5):
@@ -544,13 +434,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
                     'suggested_changes': predictions.get("suggested_changes", []),
                     'potential_improvements': predictions.get("potential_improvements", []),
                     'change_patterns': [
-                        { 
-                            'pattern': change['pattern'], 
-                            'frequency': change['count'],
-                            'type': change.get('type', 'unknown'),
-                            'confidence': change.get('confidence', 1.0)
-                        }
-                        for change in analyzer.get_most_common_changes(10)
+                        { 'pattern': pattern, 'frequency': freq }
+                        for pattern, freq in analyzer.get_most_common_changes(10)
                     ],
                     'file_analyzed': str(test_file),
                     'status': 'completed'

@@ -1,62 +1,10 @@
-from typing import List, Dict, Optional, Any, Callable, Tuple
+from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 import logging
 import json
-import os
-import hashlib
-import time
-from functools import wraps
-from datetime import datetime
 from lxml import etree
-import sys
 
-# Configure logging
 logger = logging.getLogger(__name__)
-
-# Cache configuration
-CACHE_ENABLED = False
-CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.cache', 'xml_diff')
-os.makedirs(CACHE_DIR, exist_ok=True)
-CACHE_TTL = 3600  # 1 hour cache TTL
-
-# Metrics collection
-class DiffMetrics:
-    def __init__(self):
-        self.comparisons = 0
-        self.cache_hits = 0
-        self.cache_misses = 0
-        self.comparison_times = []
-        self.file_sizes = []
-        self.errors = 0
-
-    def record_comparison(self, duration: float, file_size: int):
-        self.comparisons += 1
-        self.comparison_times.append(duration)
-        self.file_sizes.append(file_size)
-
-    def record_cache_hit(self):
-        self.cache_hits += 1
-
-    def record_cache_miss(self):
-        self.cache_misses += 1
-
-    def record_error(self):
-        self.errors += 1
-
-    def get_metrics(self) -> Dict[str, Any]:
-        return {
-            'total_comparisons': self.comparisons,
-            'cache_hits': self.cache_hits,
-            'cache_misses': self.cache_misses,
-            'cache_hit_ratio': self.cache_hits / (self.cache_hits + self.cache_misses) if (self.cache_hits + self.cache_misses) > 0 else 0,
-            'avg_comparison_time': sum(self.comparison_times) / len(self.comparison_times) if self.comparison_times else 0,
-            'total_errors': self.errors,
-            'avg_file_size': sum(self.file_sizes) / len(self.file_sizes) if self.file_sizes else 0,
-            'timestamp': datetime.utcnow().isoformat()
-        }
-
-# Global metrics instance
-metrics = DiffMetrics()
 
 def pretty_print_xml(xml_str: str) -> str:
     """Return pretty-printed XML string to avoid giant single-line diffs."""
@@ -247,7 +195,7 @@ class XMLDiff:
                     node = str(change[1]) if len(change) > 1 else ''
                     old_value = str(change[2]) if len(change) > 2 else ''
                     new_value = str(change[3]) if len(change) > 3 else ''
-                    xpath = node
+                    xpath = node  # For tuple format, node contains the XPath
                 else:
                     action = safe_get_attr(change, 'action', 'unknown')
                     node = safe_get_attr(change, 'node', '')
@@ -255,6 +203,7 @@ class XMLDiff:
                     new_value = safe_get_attr(change, 'new_value', '')
                     xpath = safe_get_attr(change, 'xpath', node)
                 
+                # Skip if values are effectively the same after normalization
                 if action == 'update' and normalize_text(old_value) == normalize_text(new_value):
                     logger.debug(f"Skipping semantically equal values: {old_value} -> {new_value}")
                     continue
@@ -387,71 +336,45 @@ def read_xml(path: str) -> str:
         raise Exception(f"Error reading XML file {path}: {str(e)}") from e
 
 
-def compare_xml_files(v1_path: str, v2_path: str, 
-                    ignore_whitespace: bool = True,
-                    normalize_case: bool = False,
-                    ignore_comments: bool = True) -> List[Dict]:
-    """
-    Compare two XML files and return structured diffs with caching.
-    
-    Args:
-        v1_path: Path to first XML file
-        v2_path: Path to second XML file
-        ignore_whitespace: If True, normalize whitespace in text content
-        normalize_case: If True, perform case-insensitive comparison
-        ignore_comments: If True, exclude comments from comparison
-        
-    Returns:
-        List of dictionaries containing the differences
-    """
-    start_time = time.time()
-    
-    # Generate cache key based on file paths and comparison parameters
-    cache_key = _get_cache_key(
-        v1_path, v2_path,
-        ignore_whitespace=ignore_whitespace,
-        normalize_case=normalize_case,
-        ignore_comments=ignore_comments
-    )
-    
-    # Try to get cached result
-    cached_result = _get_cached_result(cache_key)
-    if cached_result is not None:
-        metrics.record_cache_hit()
-        return cached_result
-        
-    metrics.record_cache_miss()
-    
+def compare_xml_files(v1_path: str, v2_path: str) -> List[Dict]:
+    """Compare two XML files and return structured diffs."""
     try:
-        # Read and validate files
         v1_content = read_xml(v1_path)
         v2_content = read_xml(v2_path)
-        
-        # Generate diff using XMLDiff
         diff = XMLDiff(v1_content, v2_content)
-        result = [change.to_dict() for change in diff.diff]
-        
-        # Record metrics
-        duration = time.time() - start_time
-        file_size = os.path.getsize(v1_path) + os.path.getsize(v2_path)
-        metrics.record_comparison(duration, file_size)
-        
-        # Cache the result
-        _save_to_cache(cache_key, result)
-        
-        return result
-        
+        return [change.to_dict() for change in diff.diff]
     except Exception as e:
-        metrics.record_error()
-        logger.error(f"Error comparing files {v1_path} and {v2_path}: {e}", 
-                    exc_info=True)
+        logger.error(f"Error comparing files {v1_path} and {v2_path}: {e}")
         return [{
             'action': 'error',
-            'error_type': 'comparison_error',
-            'message': f'Error comparing files: {str(e)}',
-            'xpath': '/',
-            'timestamp': datetime.utcnow().isoformat()
+            'node': 'document',
+            'error': str(e),
+            'xpath': '/'
         }]
+
+def _safe_value(value: Any, max_length: int = 100) -> str:
+    """
+    Safely convert a value to string and truncate if needed.
+    
+    Args:
+        value: The value to convert to string
+        max_length: Maximum length of the output string
+        
+    Returns:
+        String representation of the value, truncated if needed
+    """
+    if value is None:
+        return "[None]"
+        
+    text = str(value).strip()
+    if not text:
+        return "[Empty]"
+        
+    # Truncate long text and add ellipsis
+    if len(text) > max_length:
+        return text[:max_length] + "..."
+        
+    return text
 
 def compute_diff(xml_path_1: str, xml_path_2: str) -> List[Dict]:
     try:
@@ -505,112 +428,3 @@ def compute_diff(xml_path_1: str, xml_path_2: str) -> List[Dict]:
 def print_pretty_diff(diffs: List[Dict]) -> None:
     """Pretty print diffs in an indented format."""
     print(json.dumps(diffs, indent=4, ensure_ascii=False))
-
-def _get_cache_key(file1: str, file2: str, **kwargs) -> str:
-    """Generate a cache key based on file paths and comparison parameters."""
-    key_parts = [
-        os.path.abspath(file1),
-        os.path.abspath(file2),
-        str(sorted(kwargs.items()))
-    ]
-    return hashlib.md5('|'.join(key_parts).encode('utf-8')).hexdigest()
-
-def _get_cached_result(cache_key: str) -> Optional[Dict]:
-    """Retrieve a cached comparison result if it exists and is fresh."""
-    if not CACHE_ENABLED:
-        return None
-        
-    cache_file = os.path.join(CACHE_DIR, f"{cache_key}.json")
-    try:
-        if os.path.exists(cache_file):
-            mtime = os.path.getmtime(cache_file)
-            if (time.time() - mtime) < CACHE_TTL:
-                with open(cache_file, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-    except Exception as e:
-        logger.warning(f"Cache read error: {e}")
-    return None
-
-def _save_to_cache(cache_key: str, result: Dict) -> None:
-    """Save comparison result to cache."""
-    if not CACHE_ENABLED:
-        return
-        
-    try:
-        cache_file = os.path.join(CACHE_DIR, f"{cache_key}.json")
-        with open(cache_file, 'w', encoding='utf-8') as f:
-            json.dump(result, f)
-    except Exception as e:
-        logger.warning(f"Cache write error: {e}")
-
-def clear_cache() -> None:
-    """Clear all cached comparison results."""
-    if os.path.exists(CACHE_DIR):
-        for filename in os.listdir(CACHE_DIR):
-            if filename.endswith('.json'):
-                try:
-                    os.remove(os.path.join(CACHE_DIR, filename))
-                except Exception as e:
-                    logger.warning(f"Error clearing cache file {filename}: {e}")
-
-def get_cache_stats() -> Dict[str, Any]:
-    """Get statistics about the cache."""
-    if not os.path.exists(CACHE_DIR):
-        return {
-            'cache_enabled': CACHE_ENABLED,
-            'cache_dir': CACHE_DIR,
-            'cache_ttl_seconds': CACHE_TTL,
-            'cached_items': 0,
-            'cache_size_bytes': 0
-        }
-        
-    cache_files = [f for f in os.listdir(CACHE_DIR) if f.endswith('.json')]
-    total_size = sum(os.path.getsize(os.path.join(CACHE_DIR, f)) for f in cache_files)
-    
-    return {
-        'cache_enabled': CACHE_ENABLED,
-        'cache_dir': CACHE_DIR,
-        'cache_ttl_seconds': CACHE_TTL,
-        'cached_items': len(cache_files),
-        'cache_size_bytes': total_size,
-        'cache_size_mb': round(total_size / (1024 * 1024), 2)
-    }
-
-def get_metrics() -> Dict[str, Any]:
-    """Get current metrics about XML comparisons."""
-    cache_stats = get_cache_stats()
-    metrics_data = metrics.get_metrics()
-    
-    return {
-        'comparison_metrics': metrics_data,
-        'cache_metrics': cache_stats,
-        'system': {
-            'python_version': '.'.join(map(str, sys.version_info[:3])),
-            'platform': sys.platform,
-            'timestamp': datetime.utcnow().isoformat()
-        }
-    }
-
-def _safe_value(value: Any, max_length: int = 100) -> str:
-    """
-    Safely convert a value to string and truncate if needed.
-    
-    Args:
-        value: The value to convert to string
-        max_length: Maximum length of the output string
-        
-    Returns:
-        String representation of the value, truncated if needed
-    """
-    if value is None:
-        return "[None]"
-        
-    text = str(value).strip()
-    if not text:
-        return "[Empty]"
-        
-    # Truncate long text and add ellipsis
-    if len(text) > max_length:
-        return text[:max_length] + "..."
-        
-    return text

@@ -50,42 +50,18 @@ logger = logging.getLogger(__name__)
 
 class ChangeAnalyzer:
     def __init__(self):
-        self.change_patterns = defaultdict(lambda: defaultdict(dict))
+        self.change_patterns = defaultdict(lambda: defaultdict(int))
         self.tag_changes = defaultdict(int)
         self.change_types = defaultdict(int)
         self.changed_paths = set()
         self.false_positives = 0
         self.valid_changes = 0
 
-    def _get_semantic_similarity(self, text1: str, text2: str) -> float:
-        """Calculate semantic similarity between two text strings."""
-        import difflib
-        if not text1 or not text2:
-            return 0.0
-        return difflib.SequenceMatcher(None, text1, text2).ratio()
-
-    def _is_semantic_change(self, old_val: str, new_val: str, threshold: float = 0.9) -> tuple[bool, float]:
+    def _is_semantic_change(self, old_val: str, new_val: str) -> bool:
         """Check if there's a meaningful change between values."""
         if not old_val or not new_val:
-            return (True, 100.0)
-        similarity = self._get_semantic_similarity(old_val, new_val)
-        return (similarity < threshold, (1.0 - similarity) * 100)
-
-    def _categorize_change_type(self, old_val: str, new_val: str) -> str:
-        """Categorize the type of change based on content analysis."""
-        if not old_val:
-            return 'addition'
-        if not new_val:
-            return 'deletion'
-            
-        similarity = self._get_semantic_similarity(old_val, new_val) * 100  # Convert to percentage
-        
-        if similarity > 90:  # 0.9 * 100
-            return 'minor_edit'
-        elif similarity > 60:  # 0.6 * 100
-            return 'modification'
-        else:
-            return 'major_change'
+            return True
+        return normalize_text(old_val) != normalize_text(new_val)
 
     def analyze_diff(self, diff: List[Dict], v1_content: str, v2_content: str):
         """Analyze the diff and update change patterns with detailed information."""
@@ -97,8 +73,8 @@ class ChangeAnalyzer:
         for change in diff:
             action = change.get('action')
             node = change.get('node', '')
-            old_val = str(change.get('old_value', ''))
-            new_val = str(change.get('new_value', ''))
+            old_val = change.get('old_value', '')
+            new_val = change.get('new_value', '')
             xpath = change.get('xpath', node)
             
             if not node or not xpath:
@@ -107,15 +83,12 @@ class ChangeAnalyzer:
                 
             tag = node.split('/')[-1].split('[')[0] if node else 'unknown'
             
-            # Check for semantic change
-            is_change, confidence = self._is_semantic_change(old_val, new_val)
-            
-            # Skip if values are semantically equivalent with high confidence
-            if action == 'update' and not is_change and confidence > 80:  # 0.8 * 100
+            # Skip if values are semantically equivalent
+            if action == 'update' and not self._is_semantic_change(old_val, new_val):
                 self.false_positives += 1
                 logger.debug(f"Skipping semantically equivalent change: {tag} {old_val} -> {new_val}")
                 continue
-
+                
             self.valid_changes += 1
             self.changed_paths.add(node)
             
@@ -123,53 +96,37 @@ class ChangeAnalyzer:
                 self.tag_changes[tag] += 1
 
             self.change_types[action] += 1
-            
-            # Categorize the change while maintaining original pattern format
+
+            # Track change patterns
             if action == 'update' and old_val and new_val:
                 pattern = f"{tag}: {old_val} -> {new_val}"
-                change_type = self._categorize_change_type(old_val, new_val)
-            elif action == 'insert':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'insert' and new_val:
                 pattern = f"Add {tag}: {new_val}"
-                change_type = 'addition'
-                confidence = 100.0  # 100% confidence for additions
-            elif action == 'delete':
+                self.change_patterns[tag][pattern] += 1
+            elif action == 'delete' and old_val:
                 pattern = f"Remove {tag}: {old_val}"
-                change_type = 'deletion'
-                confidence = 100.0  # 100% confidence for deletions
-            else:
-                # Skip any other action types
-                continue
-                
-            # Store the change with its metadata
-            self.change_patterns[tag][pattern] = {
-                'count': self.change_patterns[tag].get(pattern, {}).get('count', 0) + 1,
-                'type': change_type,
-                'confidence': confidence  # Already in percentage
-            }
+                self.change_patterns[tag][pattern] += 1
                 
         logger.info(f"Processed {self.valid_changes} valid changes, filtered {self.false_positives} false positives")
 
-    def get_most_common_changes(self, top_n: int = 5) -> List[Dict]:
+    def get_most_common_changes(self, top_n: int = 5) -> List[Tuple[str, int]]:
         """Get the most common change patterns across all tags."""
         all_changes = []
         for tag, patterns in self.change_patterns.items():
-            for pattern, data in patterns.items():
-                all_changes.append({
-                    'pattern': pattern,
-                    'count': data['count'],
-                    'type': data.get('type', 'unknown'),
-                    'confidence': data.get('confidence', 1.0)
-                })
+            for pattern, count in patterns.items():
+                all_changes.append((pattern, count))
 
-        return sorted(all_changes, key=lambda x: x['count'], reverse=True)[:top_n]
+        return sorted(all_changes, key=lambda x: x[1], reverse=True)[:top_n]
 
     def get_changes_by_tag(self, tag: str, top_n: int = 3) -> List[Tuple[str, int]]:
         """Get the most common changes for a specific tag."""
         if tag in self.change_patterns:
-            changes = []
-            for pattern, data in self.change_patterns[tag].items():
-                changes.append((pattern, data['count']))
-            return sorted(changes, key=lambda x: x[1], reverse=True)[:top_n]
+            return sorted(
+                self.change_patterns[tag].items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:top_n]
         return []
 
     def get_most_changed_tags(self, top_n: int = 3, min_count: int = 2) -> List[Tuple[str, int]]:
@@ -491,8 +448,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
             print(f"\nError during training: {str(e)}")
         print("\n=== Change Analysis ===")
         print("\nMost common change patterns:")
-        for change in analyzer.get_most_common_changes(5):
-            print(f"- {change['pattern']} (x{change['count']}) - Type: {change['type']}, Confidence: {change.get('confidence', 1.0):.2f}")
+        for pattern, count in analyzer.get_most_common_changes(5):
+            print(f"- {pattern} (x{count})")
 
         print("\nMost frequently changed tags:")
         for tag, count in analyzer.get_most_changed_tags(5):
@@ -544,13 +501,8 @@ async def run_pipeline(analyzer: ChangeAnalyzer = None, file_path: str = None, j
                     'suggested_changes': predictions.get("suggested_changes", []),
                     'potential_improvements': predictions.get("potential_improvements", []),
                     'change_patterns': [
-                        { 
-                            'pattern': change['pattern'], 
-                            'frequency': change['count'],
-                            'type': change.get('type', 'unknown'),
-                            'confidence': change.get('confidence', 1.0)
-                        }
-                        for change in analyzer.get_most_common_changes(10)
+                        { 'pattern': pattern, 'frequency': freq }
+                        for pattern, freq in analyzer.get_most_common_changes(10)
                     ],
                     'file_analyzed': str(test_file),
                     'status': 'completed'
